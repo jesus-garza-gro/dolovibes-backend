@@ -1,0 +1,19 @@
+{
+  "collectionName": "components_package_include_items",
+  "info": {
+    "displayName": "IncludeItem",
+    "icon": "check-circle",
+    "description": "Item incluido en el paquete con label expandible"
+  },
+  "options": {},
+  "attributes": {
+    "label": {
+      "type": "string",
+      "required": true
+    },
+    "detail": {
+      "type": "text",
+      "required": false
+    }
+  }
+}

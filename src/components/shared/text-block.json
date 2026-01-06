@@ -1,0 +1,19 @@
+{
+  "collectionName": "components_shared_text_blocks",
+  "info": {
+    "displayName": "TextBlock",
+    "icon": "file-text",
+    "description": "Bloque de texto con título para secciones"
+  },
+  "options": {},
+  "attributes": {
+    "title": {
+      "type": "string",
+      "required": true
+    },
+    "content": {
+      "type": "richtext",
+      "required": true
+    }
+  }
+}

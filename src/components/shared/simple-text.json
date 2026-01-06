@@ -1,0 +1,15 @@
+{
+  "collectionName": "components_shared_simple_texts",
+  "info": {
+    "displayName": "SimpleText",
+    "icon": "align-left",
+    "description": "Texto simple para listas"
+  },
+  "options": {},
+  "attributes": {
+    "text": {
+      "type": "text",
+      "required": true
+    }
+  }
+}
