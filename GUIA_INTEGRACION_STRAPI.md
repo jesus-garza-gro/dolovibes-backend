@@ -2,7 +2,10 @@
 
 ## Estado Actual
 ✅ Código integrado en ramas `integracion-strapi` (frontend y backend)  
-⏳ Pendiente: Configuración y pruebas
+✅ **NUEVO:** Funcionalidades de moneda e idioma implementadas y activadas  
+⏳ Pendiente: Configuración de Strapi y pruebas finales
+
+**Última actualización:** 6 de enero de 2026
 
 ---
 
@@ -212,7 +215,10 @@ npm run dev
 - [ ] **Experience Page** muestra detalles de experiencia
 - [ ] **Package Info Page** muestra paquete completo con itinerario
 - [ ] **ExperienceSelector** filtra por temporada correctamente
-- [ ] Cambio de idioma ES/EN funciona
+- [x] **Cambio de idioma ES/EN** funciona ✅ (Implementado)
+- [x] **Detección automática de idioma** ✅ (Implementado)
+- [x] **Selector de moneda MXN/USD/EUR/GBP** ✅ (Implementado)
+- [x] **Conversión automática de precios** ✅ (Implementado)
 - [ ] Las imágenes se muestran correctamente
 
 ### Pruebas Específicas
@@ -231,8 +237,17 @@ npm run dev
    - Cambiar idioma a EN
    - Verificar que los textos cambian
    - Verificar que Strapi devuelve contenido en inglés
+   - ✅ **Idioma se detecta automáticamente al cargar**
+
+4. **Conversión de moneda:** ✅
+   - Verificar selector de moneda en navbar
+   - Cambiar entre MXN/USD/EUR/GBP
+   - Verificar que precios se convierten correctamente
+   - Verificar que la preferencia se guarda (recargar página)
 
 ---
+
+## 🔄 Volver a Datos Estáticos
 
 ## 🔄 Volver a Datos Estáticos
 
@@ -243,32 +258,78 @@ Si necesitas desactivar Strapi temporalmente:
 VITE_USE_STRAPI=false
 ```
 
-El frontend volverá a usar `packages.js` y `experiences.js`.
+El frontend volverá a usar `packages.js` y `experiences.js` (datos estáticos).
+
+**Nota:** Las funcionalidades de moneda e idioma seguirán funcionando independientemente de si usas Strapi o datos estáticos.
 
 ---
 
-## 🚀 Features Preparadas (No Activar Aún)
+## 🚀 Features Implementadas y Activas ✅
 
-### Conversión Automática de Moneda ($4,000-6,000 MXN)
+### 💱 Conversión Automática de Moneda
 
-**Estado:** Código preparado, DESACTIVADO
+**Estado:** ✅ **IMPLEMENTADO Y ACTIVADO** (6 enero 2026)  
+**Inversión:** $4,000-6,000 MXN
 
-**Para activar:**
-1. Registrarse en https://exchangerate-api.io
-2. Agregar `VITE_EXCHANGE_RATE_API_KEY` en `.env.local`
-3. En `src/utils/currency.js`: cambiar `CURRENCY_CONVERSION_ENABLED = true`
+**Funcionalidades:**
+- ✅ Detección automática de moneda por ubicación IP (ipapi.co)
+- ✅ Conversión en tiempo real con cache de 1 hora
+- ✅ Soporte para 4 monedas: MXN 🇲🇽, USD 🇺🇸, EUR 🇪🇺, GBP 🇬🇧
+- ✅ Selector de moneda en navbar (desktop y móvil)
+- ✅ Persistencia de preferencia en localStorage
+- ✅ Tasas de fallback cuando API no disponible
+- ✅ Compatibilidad con navegadores antiguos
 
-### Detección Automática de Idioma ($1,500-2,500 MXN)
+**Componentes agregados:**
+- `src/utils/currency.js` - Sistema completo de conversión
+- `src/components/CurrencySelector.jsx` - Selector dropdown accesible
+- `CurrencyProvider` envuelve la app en `main.jsx`
 
-**Estado:** Código preparado, DESACTIVADO
+**Uso en componentes:**
+```jsx
+import { useCurrencyContext, parsePrice } from '../utils/currency';
 
-**Para activar:**
-1. En `src/i18n.js`: cambiar `LANGUAGE_DETECTION_ENABLED = true`
-2. El idioma se detectará automáticamente del navegador
+const { formatPrice, currency } = useCurrencyContext();
+const converted = formatPrice(parsePrice(pkg.price)); // "$1,450 USD"
+```
+
+**Configuración opcional (para tasas actualizadas):**
+1. Registrarse en https://exchangerate-api.com (gratis: 1500 requests/mes)
+2. Agregar en `.env.local`:
+```env
+VITE_EXCHANGE_RATE_API_KEY=tu_api_key_aqui
+```
+
+**Sin API key:** Usa tasas de fallback aproximadas (funcional).
 
 ---
 
-## 📝 Notas Importantes
+### 🌍 Detección Automática de Idioma
+
+**Estado:** ✅ **IMPLEMENTADO Y ACTIVADO** (6 enero 2026)  
+**Inversión:** $1,500-2,500 MXN
+
+**Funcionalidades:**
+- ✅ Detección automática del idioma del navegador
+- ✅ Prioridad: localStorage > navegador > español (fallback)
+- ✅ Selector mejorado con banderas 🇪🇸 🇺🇸
+- ✅ Navegación por teclado (Escape, Arrow keys)
+- ✅ Accesibilidad completa (ARIA roles)
+- ✅ Persistencia en localStorage
+
+**Componentes actualizados:**
+- `src/i18n.js` - `LANGUAGE_DETECTION_ENABLED = true`
+- `src/components/LanguageSwitcher.jsx` - Mejorado con banderas y accesibilidad
+
+**Código activado:**
+```js
+// src/i18n.js
+const LANGUAGE_DETECTION_ENABLED = true; // ✅ Activado
+```
+
+---
+
+## 📋 Pasos Siguientes para Completar Integración
 
 ### URLs de Imágenes
 - Las imágenes actualmente son URLs de Unsplash
@@ -319,13 +380,21 @@ El frontend volverá a usar `packages.js` y `experiences.js`.
 
 ---
 
-## 📞 Contacto de Desarrollo
+## 📞 Resumen de Inversión
 
-- **Proyecto:** Dolovibes
-- **Costo Total:** $28,000 MXN
-- **Features Adicionales:** $4,000-6,000 MXN (conversión moneda + detección idioma)
-- **Framework Backend:** Strapi 5.31.2
-- **Framework Frontend:** React 19 + Vite
+- **Integración Strapi Base:** $28,000 MXN ✅
+- **Conversión de Moneda:** $4,000-6,000 MXN ✅ **IMPLEMENTADO**
+- **Detección de Idioma:** $1,500-2,500 MXN ✅ **IMPLEMENTADO**
+- **Total Invertido:** ~$33,500-36,500 MXN
+
+**Stack Tecnológico:**
+- Backend: Strapi 5.31.2 + TypeScript
+- Frontend: React 19 + Vite + TailwindCSS
+- i18n: react-i18next + i18next-browser-languagedetector
+- Moneda: API exchangerate-api.com + ipapi.co
+- Queries: @tanstack/react-query
+
+**Fecha de implementación features:** 6 de enero de 2026
 
 ---
 
