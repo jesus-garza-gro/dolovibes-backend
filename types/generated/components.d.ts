@@ -1,5 +1,22 @@
 import type { Schema, Struct } from '@strapi/strapi';
 
+export interface PackageGalleryImage extends Struct.ComponentSchema {
+  collectionName: 'components_package_gallery_images';
+  info: {
+    description: 'Imagen de galer\u00EDa con descripci\u00F3n';
+    displayName: 'Gallery Image';
+  };
+  attributes: {
+    caption: Schema.Attribute.String &
+      Schema.Attribute.SetPluginOptions<{
+        i18n: {
+          localized: true;
+        };
+      }>;
+    image: Schema.Attribute.Media<'images'> & Schema.Attribute.Required;
+  };
+}
+
 export interface PackageIncludeItem extends Struct.ComponentSchema {
   collectionName: 'components_package_include_items';
   info: {
@@ -32,6 +49,37 @@ export interface PackageItineraryDay extends Struct.ComponentSchema {
     description: Schema.Attribute.Text & Schema.Attribute.Required;
     image: Schema.Attribute.Media<'images'>;
     title: Schema.Attribute.String & Schema.Attribute.Required;
+  };
+}
+
+export interface PackageLocationInfo extends Struct.ComponentSchema {
+  collectionName: 'components_package_location_info';
+  info: {
+    description: 'Informaci\u00F3n de ubicaci\u00F3n y c\u00F3mo llegar';
+    displayName: 'Location Info';
+  };
+  attributes: {
+    googleMapsUrl: Schema.Attribute.String;
+    howToGetThere: Schema.Attribute.Text &
+      Schema.Attribute.SetPluginOptions<{
+        i18n: {
+          localized: true;
+        };
+      }>;
+    latitude: Schema.Attribute.Decimal;
+    longitude: Schema.Attribute.Decimal;
+    nearestAirport: Schema.Attribute.String &
+      Schema.Attribute.SetPluginOptions<{
+        i18n: {
+          localized: true;
+        };
+      }>;
+    nearestCity: Schema.Attribute.String &
+      Schema.Attribute.SetPluginOptions<{
+        i18n: {
+          localized: true;
+        };
+      }>;
   };
 }
 
@@ -124,8 +172,10 @@ export interface SharedTextBlock extends Struct.ComponentSchema {
 declare module '@strapi/strapi' {
   export module Public {
     export interface ComponentSchemas {
+      'package.gallery-image': PackageGalleryImage;
       'package.include-item': PackageIncludeItem;
       'package.itinerary-day': PackageItineraryDay;
+      'package.location-info': PackageLocationInfo;
       'package.start-date': PackageStartDate;
       'shared.legal-page': SharedLegalPage;
       'shared.seo': SharedSeo;

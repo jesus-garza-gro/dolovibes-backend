@@ -14,6 +14,9 @@
  * Para subir imágenes a Strapi, se necesitaría descargarlas y usar la API de upload.
  */
 
+// Cargar variables de entorno desde .env
+require('dotenv').config();
+
 const STRAPI_URL = process.env.STRAPI_URL || 'http://localhost:1337';
 const STRAPI_API_TOKEN = process.env.STRAPI_API_TOKEN || 'TU_API_TOKEN_AQUI';
 
@@ -182,6 +185,13 @@ const packages = [
       { date: "2025-06-22", displayText: "22 Jun 2025" },
       { date: "2025-07-06", displayText: "6 Jul 2025" },
       { date: "2025-07-20", displayText: "20 Jul 2025" }
+    ],
+    gallery: [
+      { caption: "Refugio Auronzo - Primer día de travesía" },
+      { caption: "Vista panorámica de las Tre Cime di Lavaredo" },
+      { caption: "Sendero hacia el Lago di Braies" },
+      { caption: "Atardecer desde el refugio" },
+      { caption: "Grupo de senderistas en el paso Giau" }
     ],
     thumbnailUrl: "https://images.unsplash.com/photo-1516426122078-c23e76319801?auto=format&fit=crop&q=80&w=800",
     heroImageUrl: "https://images.unsplash.com/photo-1516426122078-c23e76319801?auto=format&fit=crop&q=80&w=1920"
@@ -449,8 +459,13 @@ const packages = [
 // FUNCIONES DE MIGRACIÓN
 // ============================================
 
-async function makeRequest(endpoint, method = 'GET', data = null) {
-  const url = `${STRAPI_URL}/api${endpoint}`;
+async function makeRequest(endpoint, method = 'GET', data = null, locale = 'es') {
+  // Si hay data y tiene locale, usarlo en la query string
+  let url = `${STRAPI_URL}/api${endpoint}`;
+  if (data && method === 'POST') {
+    url += `?locale=${locale}`;
+  }
+  
   const options = {
     method,
     headers: {
@@ -460,7 +475,9 @@ async function makeRequest(endpoint, method = 'GET', data = null) {
   };
   
   if (data) {
-    options.body = JSON.stringify({ data });
+    // Remover locale del data si existe, ya está en la query string
+    const { locale: _, ...dataWithoutLocale } = data;
+    options.body = JSON.stringify({ data: dataWithoutLocale });
   }
   
   const response = await fetch(url, options);
@@ -479,7 +496,7 @@ async function migrateExperiences() {
   
   for (const exp of experiences) {
     try {
-      // Preparar datos para Strapi
+      // Preparar datos para Strapi con locale español
       const strapiData = {
         title: exp.title,
         slug: exp.slug,
@@ -491,6 +508,7 @@ async function migrateExperiences() {
         whatToExpect: exp.whatToExpect,
         tags: exp.tags,
         highlights: exp.highlights,
+        locale: 'es',
         // Las imágenes se dejan como URLs externas por ahora
         // Para subir a Strapi se necesitaría descargar y usar la API de upload
       };
@@ -513,6 +531,26 @@ async function migratePackages(experienceMap) {
     try {
       const experienceId = experienceMap[pkg.experienceSlug];
       
+      // Preparar gallery con captions de ejemplo
+      const galleryData = pkg.gallery && pkg.gallery.length > 0 ? pkg.gallery.map((url, index) => ({
+        caption: `Imagen ${index + 1} - ${pkg.title}`
+        // La imagen se subirá manualmente en Strapi Admin
+      })) : [
+        { caption: `Vista panorámica - ${pkg.title}` },
+        { caption: `Sendero principal - ${pkg.title}` },
+        { caption: `Refugio de montaña - ${pkg.title}` }
+      ];
+      
+      // Preparar locationInfo con datos de ejemplo
+      const locationInfoData = {
+        howToGetThere: `Para llegar a ${pkg.location}, puedes tomar un vuelo a Venecia o Verona y luego un traslado terrestre de aproximadamente 2-3 horas. También ofrecemos servicio de transfer desde el aeropuerto.`,
+        latitude: 46.5369,
+        longitude: 11.9509,
+        googleMapsUrl: `https://www.google.com/maps/search/?api=1&query=${pkg.location?.replace(/ /g, '+')}`,
+        nearestAirport: 'Aeropuerto de Venecia Marco Polo (VCE)',
+        nearestCity: 'Cortina d\'Ampezzo'
+      };
+      
       // Preparar datos para Strapi
       const strapiData = {
         title: pkg.title,
@@ -520,7 +558,6 @@ async function migratePackages(experienceMap) {
         location: pkg.location,
         priceAmount: pkg.priceAmount,
         originalPriceAmount: pkg.originalPriceAmount || null,
-        baseCurrency: pkg.baseCurrency,
         duration: pkg.duration,
         rating: pkg.rating,
         hasDiscount: pkg.hasDiscount,
@@ -535,6 +572,9 @@ async function migratePackages(experienceMap) {
         includes: pkg.includes,
         notIncludes: pkg.notIncludes,
         startDates: pkg.startDates,
+        gallery: galleryData,
+        locationInfo: locationInfoData,
+        locale: 'es',
         // Relación con experiencia
         experience: experienceId ? { connect: [experienceId] } : undefined
       };

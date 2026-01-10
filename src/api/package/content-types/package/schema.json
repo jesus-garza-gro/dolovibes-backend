@@ -54,18 +54,6 @@
         }
       }
     },
-    "baseCurrency": {
-      "type": "enumeration",
-      "enum": ["MXN", "USD", "EUR"],
-      "default": "MXN",
-      "required": true,
-      "pluginOptions": {
-        "i18n": {
-          "localized": false
-        }
-      },
-      "private": true
-    },
     "originalPriceAmount": {
       "type": "decimal",
       "required": false,
@@ -118,13 +106,12 @@
       }
     },
     "gallery": {
-      "type": "media",
-      "multiple": true,
-      "required": false,
-      "allowedTypes": ["images"],
+      "type": "component",
+      "repeatable": true,
+      "component": "package.gallery-image",
       "pluginOptions": {
         "i18n": {
-          "localized": false
+          "localized": true
         }
       }
     },
@@ -240,6 +227,16 @@
       "pluginOptions": {
         "i18n": {
           "localized": false
+        }
+      }
+    },
+    "locationInfo": {
+      "type": "component",
+      "repeatable": false,
+      "component": "package.location-info",
+      "pluginOptions": {
+        "i18n": {
+          "localized": true
         }
       }
     },

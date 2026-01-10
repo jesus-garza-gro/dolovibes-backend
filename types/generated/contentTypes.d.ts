@@ -852,15 +852,6 @@ export interface ApiPackagePackage extends Struct.CollectionTypeSchema {
           localized: true;
         };
       }>;
-    baseCurrency: Schema.Attribute.Enumeration<['MXN', 'USD', 'EUR']> &
-      Schema.Attribute.Required &
-      Schema.Attribute.Private &
-      Schema.Attribute.SetPluginOptions<{
-        i18n: {
-          localized: false;
-        };
-      }> &
-      Schema.Attribute.DefaultTo<'MXN'>;
     createdAt: Schema.Attribute.DateTime;
     createdBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
       Schema.Attribute.Private;
@@ -888,10 +879,10 @@ export interface ApiPackagePackage extends Struct.CollectionTypeSchema {
       'manyToOne',
       'api::experience.experience'
     >;
-    gallery: Schema.Attribute.Media<'images', true> &
+    gallery: Schema.Attribute.Component<'package.gallery-image', true> &
       Schema.Attribute.SetPluginOptions<{
         i18n: {
-          localized: false;
+          localized: true;
         };
       }>;
     groupSize: Schema.Attribute.String &
@@ -939,6 +930,12 @@ export interface ApiPackagePackage extends Struct.CollectionTypeSchema {
     >;
     location: Schema.Attribute.String &
       Schema.Attribute.Required &
+      Schema.Attribute.SetPluginOptions<{
+        i18n: {
+          localized: true;
+        };
+      }>;
+    locationInfo: Schema.Attribute.Component<'package.location-info', false> &
       Schema.Attribute.SetPluginOptions<{
         i18n: {
           localized: true;
