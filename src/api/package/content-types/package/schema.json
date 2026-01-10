@@ -63,7 +63,8 @@
         "i18n": {
           "localized": false
         }
-      }
+      },
+      "private": true
     },
     "originalPriceAmount": {
       "type": "decimal",
