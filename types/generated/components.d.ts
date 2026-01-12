@@ -3,8 +3,9 @@ import type { Schema, Struct } from '@strapi/strapi';
 export interface PackageGalleryImage extends Struct.ComponentSchema {
   collectionName: 'components_package_gallery_images';
   info: {
-    description: 'Imagen de galer\u00EDa con descripci\u00F3n';
-    displayName: 'Gallery Image';
+    description: "Una imagen para la galer\u00EDa de fotos del paquete. El 'caption' es el pie de foto que se muestra debajo de la imagen.";
+    displayName: '\uD83D\uDDBC\uFE0F Foto de Galer\u00EDa';
+    icon: 'picture';
   };
   attributes: {
     caption: Schema.Attribute.String &
@@ -20,8 +21,8 @@ export interface PackageGalleryImage extends Struct.ComponentSchema {
 export interface PackageIncludeItem extends Struct.ComponentSchema {
   collectionName: 'components_package_include_items';
   info: {
-    description: 'Item incluido en el paquete con label expandible';
-    displayName: 'IncludeItem';
+    description: "Un servicio o beneficio incluido en el precio del paquete. El 'label' es el t\u00EDtulo corto (ej: 'Gu\u00EDa UIAGM'), el 'detail' es la explicaci\u00F3n expandible.";
+    displayName: '\u2705 Incluido en el paquete';
     icon: 'check-circle';
   };
   attributes: {
@@ -33,8 +34,8 @@ export interface PackageIncludeItem extends Struct.ComponentSchema {
 export interface PackageItineraryDay extends Struct.ComponentSchema {
   collectionName: 'components_package_itinerary_days';
   info: {
-    description: 'D\u00EDa del itinerario con t\u00EDtulo, descripci\u00F3n e imagen';
-    displayName: 'ItineraryDay';
+    description: 'Un d\u00EDa del itinerario del viaje. Incluye n\u00FAmero de d\u00EDa, t\u00EDtulo descriptivo, descripci\u00F3n detallada de las actividades, y una imagen representativa.';
+    displayName: '\uD83D\uDCC5 D\u00EDa de Itinerario';
     icon: 'calendar';
   };
   attributes: {

@@ -1,9 +1,9 @@
 {
   "collectionName": "components_package_itinerary_days",
   "info": {
-    "displayName": "ItineraryDay",
+    "displayName": "📅 Día de Itinerario",
     "icon": "calendar",
-    "description": "Día del itinerario con título, descripción e imagen"
+    "description": "Un día del itinerario del viaje. Incluye número de día, título descriptivo, descripción detallada de las actividades, y una imagen representativa."
   },
   "options": {},
   "attributes": {
@@ -24,7 +24,9 @@
       "type": "media",
       "multiple": false,
       "required": false,
-      "allowedTypes": ["images"]
+      "allowedTypes": [
+        "images"
+      ]
     }
   }
 }

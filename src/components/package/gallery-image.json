@@ -1,8 +1,9 @@
 {
   "collectionName": "components_package_gallery_images",
   "info": {
-    "displayName": "Gallery Image",
-    "description": "Imagen de galería con descripción"
+    "displayName": "🖼️ Foto de Galería",
+    "icon": "picture",
+    "description": "Una imagen para la galería de fotos del paquete. El 'caption' es el pie de foto que se muestra debajo de la imagen."
   },
   "options": {},
   "attributes": {
@@ -10,7 +11,9 @@
       "type": "media",
       "multiple": false,
       "required": true,
-      "allowedTypes": ["images"]
+      "allowedTypes": [
+        "images"
+      ]
     },
     "caption": {
       "type": "string",

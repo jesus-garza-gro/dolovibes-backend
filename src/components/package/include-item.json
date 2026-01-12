@@ -1,9 +1,9 @@
 {
   "collectionName": "components_package_include_items",
   "info": {
-    "displayName": "IncludeItem",
+    "displayName": "✅ Incluido en el paquete",
     "icon": "check-circle",
-    "description": "Item incluido en el paquete con label expandible"
+    "description": "Un servicio o beneficio incluido en el precio del paquete. El 'label' es el título corto (ej: 'Guía UIAGM'), el 'detail' es la explicación expandible."
   },
   "options": {},
   "attributes": {
