@@ -509,13 +509,27 @@ async function migrateExperiences() {
         tags: exp.tags,
         highlights: exp.highlights,
         locale: 'es',
-        // Las imágenes se dejan como URLs externas por ahora
-        // Para subir a Strapi se necesitaría descargar y usar la API de upload
       };
       
-      const result = await makeRequest('/experiences', 'POST', strapiData);
-      experienceMap[exp.slug] = result.data.id;
-      console.log(`  ✅ ${exp.title} (ID: ${result.data.id})`);
+      try {
+        // Intentar crear nuevo
+        const result = await makeRequest('/experiences', 'POST', strapiData);
+        experienceMap[exp.slug] = result.data.id;
+        console.log(`  ✅ ${exp.title} creado (ID: ${result.data.id})`);
+      } catch (createError) {
+        // Si falla por slug duplicado, buscar y actualizar
+        if (createError.message.includes('unique')) {
+          const existing = await makeRequest(`/experiences?filters[slug][$eq]=${exp.slug}`);
+          if (existing.data && existing.data.length > 0) {
+            const existingId = existing.data[0].id;
+            await makeRequest(`/experiences/${existingId}`, 'PUT', strapiData);
+            experienceMap[exp.slug] = existingId;
+            console.log(`  🔄 ${exp.title} actualizado (ID: ${existingId})`);
+          }
+        } else {
+          throw createError;
+        }
+      }
     } catch (error) {
       console.error(`  ❌ Error migrando ${exp.title}:`, error.message);
     }
@@ -534,7 +548,6 @@ async function migratePackages(experienceMap) {
       // Preparar gallery con captions de ejemplo
       const galleryData = pkg.gallery && pkg.gallery.length > 0 ? pkg.gallery.map((url, index) => ({
         caption: `Imagen ${index + 1} - ${pkg.title}`
-        // La imagen se subirá manualmente en Strapi Admin
       })) : [
         { caption: `Vista panorámica - ${pkg.title}` },
         { caption: `Sendero principal - ${pkg.title}` },
@@ -575,12 +588,26 @@ async function migratePackages(experienceMap) {
         gallery: galleryData,
         locationInfo: locationInfoData,
         locale: 'es',
-        // Relación con experiencia
         experience: experienceId ? { connect: [experienceId] } : undefined
       };
       
-      const result = await makeRequest('/packages', 'POST', strapiData);
-      console.log(`  ✅ ${pkg.title} (ID: ${result.data.id})`);
+      try {
+        // Intentar crear nuevo
+        const result = await makeRequest('/packages', 'POST', strapiData);
+        console.log(`  ✅ ${pkg.title} creado (ID: ${result.data.id})`);
+      } catch (createError) {
+        // Si falla por slug duplicado, buscar y actualizar
+        if (createError.message.includes('unique')) {
+          const existing = await makeRequest(`/packages?filters[slug][$eq]=${pkg.slug}`);
+          if (existing.data && existing.data.length > 0) {
+            const existingId = existing.data[0].id;
+            await makeRequest(`/packages/${existingId}`, 'PUT', strapiData);
+            console.log(`  🔄 ${pkg.title} actualizado (ID: ${existingId})`);
+          }
+        } else {
+          throw createError;
+        }
+      }
     } catch (error) {
       console.error(`  ❌ Error migrando ${pkg.title}:`, error.message);
     }
