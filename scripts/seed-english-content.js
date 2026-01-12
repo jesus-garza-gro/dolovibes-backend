@@ -224,7 +224,7 @@ async function createEnglishVersion(pkg, translation) {
     // Preparar datos para la versión en inglés
     const englishData = {
         title: translation.title,
-        slug: pkg.slug, // Mantener mismo slug
+        slug: `${pkg.slug}-en`, // Slug en inglés
         location: translation.location,
         duration: translation.duration,
         description: translation.description,
@@ -276,40 +276,42 @@ async function createEnglishVersion(pkg, translation) {
         englishData.tags = pkg.tags.map(t => ({ name: t.name }));
     }
 
-    // Crear localización en inglés
+    // Verificar si ya existe versión en inglés
     try {
-        const response = await axios.post(
-            `${STRAPI_URL}/api/packages/${pkg.documentId}/localizations`,
-            {
+        const enResponse = await axios.get(`${STRAPI_URL}/api/packages`, {
+            params: {
                 locale: 'en',
-                ...englishData,
+                'filters[slug][$eq]': pkg.slug,
             },
-            { headers: authHeaders }
+            headers: authHeaders,
+        });
+
+        if (enResponse.data.data.length > 0) {
+            // Ya existe, actualizar
+            const enPkg = enResponse.data.data[0];
+            await axios.put(
+                `${STRAPI_URL}/api/packages/${enPkg.documentId}`,
+                { data: englishData },
+                { headers: { ...authHeaders, 'Content-Type': 'application/json' } }
+            );
+            return { updated: true };
+        }
+
+        // No existe, crear nueva localización directamente
+        const response = await axios.post(
+            `${STRAPI_URL}/api/packages`,
+            {
+                data: englishData
+            },
+            {
+                headers: { ...authHeaders, 'Content-Type': 'application/json' },
+                params: {
+                    locale: 'en'
+                }
+            }
         );
         return response.data;
     } catch (error) {
-        // Si ya existe, intentar actualizar
-        if (error.response?.status === 400) {
-            console.log(`      ⚠️  Ya existe, intentando actualizar...`);
-            // Buscar el paquete en inglés
-            const enResponse = await axios.get(`${STRAPI_URL}/api/packages`, {
-                params: {
-                    locale: 'en',
-                    'filters[slug][$eq]': pkg.slug,
-                },
-                headers: authHeaders,
-            });
-
-            if (enResponse.data.data.length > 0) {
-                const enPkg = enResponse.data.data[0];
-                await axios.put(
-                    `${STRAPI_URL}/api/packages/${enPkg.documentId}`,
-                    { data: englishData },
-                    { headers: { ...authHeaders, 'Content-Type': 'application/json' } }
-                );
-                return { updated: true };
-            }
-        }
         throw error;
     }
 }
