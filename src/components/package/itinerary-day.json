@@ -1,0 +1,30 @@
+{
+  "collectionName": "components_package_itinerary_days",
+  "info": {
+    "displayName": "ItineraryDay",
+    "icon": "calendar",
+    "description": "Día del itinerario con título, descripción e imagen"
+  },
+  "options": {},
+  "attributes": {
+    "day": {
+      "type": "integer",
+      "required": true,
+      "min": 1
+    },
+    "title": {
+      "type": "string",
+      "required": true
+    },
+    "description": {
+      "type": "text",
+      "required": true
+    },
+    "image": {
+      "type": "media",
+      "multiple": false,
+      "required": false,
+      "allowedTypes": ["images"]
+    }
+  }
+}

@@ -1,0 +1,23 @@
+{
+  "collectionName": "components_shared_legal_pages",
+  "info": {
+    "displayName": "LegalPage",
+    "icon": "file-contract",
+    "description": "Enlace a página legal con título y URL"
+  },
+  "options": {},
+  "attributes": {
+    "title": {
+      "type": "string",
+      "required": true
+    },
+    "slug": {
+      "type": "string",
+      "required": true
+    },
+    "content": {
+      "type": "richtext",
+      "required": false
+    }
+  }
+}

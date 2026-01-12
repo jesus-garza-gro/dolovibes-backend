@@ -1,0 +1,49 @@
+{
+  "collectionName": "components_package_location_info",
+  "info": {
+    "displayName": "Location Info",
+    "description": "Información de ubicación y cómo llegar"
+  },
+  "options": {},
+  "attributes": {
+    "howToGetThere": {
+      "type": "text",
+      "required": false,
+      "pluginOptions": {
+        "i18n": {
+          "localized": true
+        }
+      }
+    },
+    "latitude": {
+      "type": "decimal",
+      "required": false
+    },
+    "longitude": {
+      "type": "decimal",
+      "required": false
+    },
+    "googleMapsUrl": {
+      "type": "string",
+      "required": false
+    },
+    "nearestAirport": {
+      "type": "string",
+      "required": false,
+      "pluginOptions": {
+        "i18n": {
+          "localized": true
+        }
+      }
+    },
+    "nearestCity": {
+      "type": "string",
+      "required": false,
+      "pluginOptions": {
+        "i18n": {
+          "localized": true
+        }
+      }
+    }
+  }
+}

@@ -1,0 +1,23 @@
+{
+  "collectionName": "components_package_start_dates",
+  "info": {
+    "displayName": "StartDate",
+    "icon": "clock",
+    "description": "Fecha de inicio disponible para un paquete"
+  },
+  "options": {},
+  "attributes": {
+    "date": {
+      "type": "date",
+      "required": true
+    },
+    "displayText": {
+      "type": "string",
+      "required": false
+    },
+    "available": {
+      "type": "boolean",
+      "default": true
+    }
+  }
+}
