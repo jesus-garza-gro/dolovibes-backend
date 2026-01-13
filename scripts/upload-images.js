@@ -149,12 +149,12 @@ const packageImages = [
   { slug: 'hut-2-hut-dolomitas-clasico', files: ['hut-2-hut---dolomitas-clasico-thumbnail.jpg', 'hut-2-hut---dolomitas-clasico-hero.jpg'] },
   { slug: 'hut-2-hut-alta-via-1', files: ['hut-2-hut---alta-via-1-thumbnail.jpg', 'hut-2-hut---alta-via-1-hero.jpg'] },
   { slug: 'hiking-lagos-alpinos', files: ['hiking---lagos-alpinos-thumbnail.jpg', 'hiking---lagos-alpinos-hero.jpg'] },
-  { slug: 'city-lights-norte-de-italia', files: ['city-lights---norte-de-italia-thumbnail.jpg', 'city-lights---norte-de-italia-hero.jpg'] },
+  { slug: 'city-lights-norte-italia', files: ['city-lights-norte-italia-thumbnail.jpg', 'city-lights-norte-italia-hero.jpg'] },
   { slug: 'ski-pull-cortina-classic', files: ['ski-pull---cortina-classic-thumbnail.jpg', 'ski-pull---cortina-classic-hero.jpg'] },
   { slug: 'ski-family-val-gardena', files: ['ski-family---val-gardena-thumbnail.jpg', 'ski-family---val-gardena-hero.jpg'] },
   { slug: 'ski-pull-sella-ronda', files: ['ski-pull---sella-ronda-thumbnail.jpg', 'ski-pull---sella-ronda-hero.jpg'] },
   { slug: 'ski-family-kronplatz', files: ['ski-family---kronplatz-thumbnail.jpg', 'ski-family---kronplatz-hero.jpg'] },
-  { slug: 'navidad-mercados-de-bolzano', files: ['navidad---mercados-de-bolzano-thumbnail.jpg', 'navidad---mercados-de-bolzano-hero.jpg'] },
+  { slug: 'navidad-mercados-bolzano', files: ['navidad-mercados-bolzano-thumbnail.jpg', 'navidad-mercados-bolzano-hero.jpg'] },
   { slug: 'navidad-val-pusteria', files: ['navidad---val-pusteria-thumbnail.jpg', 'navidad---val-pusteria-hero.jpg'] }
 ];
 
