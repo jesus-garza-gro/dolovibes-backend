@@ -644,7 +644,13 @@ export interface ApiExperienceExperience extends Struct.CollectionTypeSchema {
           localized: true;
         };
       }>;
-    slug: Schema.Attribute.UID<'title'> & Schema.Attribute.Required;
+    slug: Schema.Attribute.UID<'title'> &
+      Schema.Attribute.Required &
+      Schema.Attribute.SetPluginOptions<{
+        i18n: {
+          localized: false;
+        };
+      }>;
     tags: Schema.Attribute.Component<'shared.tag', true> &
       Schema.Attribute.SetPluginOptions<{
         i18n: {
@@ -931,7 +937,7 @@ export interface ApiPackagePackage extends Struct.CollectionTypeSchema {
       Schema.Attribute.Required &
       Schema.Attribute.SetPluginOptions<{
         i18n: {
-          localized: true;
+          localized: false;
         };
       }>;
     startDates: Schema.Attribute.Component<'package.start-date', true> &

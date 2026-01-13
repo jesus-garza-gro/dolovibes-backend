@@ -1,187 +1,272 @@
-# Scripts de Población de Contenido - DoloVibes
+# Scripts de Población de Contenido - Dolovibes Backend
 
-Directorio de scripts para poblar Strapi en ambientes locales y producción.
+Documentación técnica de scripts para poblar y mantener contenido en Strapi.
 
-## ✨ Características
-
-- **100% Idempotentes**: Todos los scripts principales pueden ejecutarse múltiples veces sin crear duplicados
-- **Verificación de existencia**: Detectan contenido existente y lo actualizan
-- **Mensajes claros**: ✅ Creado | ♻️ Actualizado | ❌ Error
-- **Preparados para CI/CD**: Pueden automatizarse sin riesgo
-
----
-
-## 🚀 Uso Rápido
-
-### Script Maestro (Recomendado)
+## ⚡ TL;DR
 
 ```bash
-# Ejecutar TODO (contenido ES, EN, IT, DE)
-node scripts/seed-all.js
-
-# Solo verificar estado actual
-node scripts/seed-all.js --verify
-
-# Solo un idioma específico
-node scripts/seed-all.js --lang=it
-
-# Ver qué haría sin ejecutar
-node scripts/seed-all.js --dry-run
-```
-
-### Ejecución Manual (Por pasos)
-
-```bash
-# 1. Contenido base español
+# Poblar todo desde cero
 node scripts/create-spanish-content.js
+node scripts/upload-images.js
+node scripts/seed-english-content.js
+node scripts/seed-experiences-english.js
+node scripts/seed-italian-packages.js
+node scripts/seed-italian-content.js
+node scripts/seed-german-packages.js
+node scripts/seed-german-content.js
 
-# 2. Traducciones de Packages
-node scripts/seed-english-content.js      # EN ✅ Idempotente
-node scripts/seed-italian-packages.js     # IT ✅ Idempotente
-node scripts/seed-german-packages.js      # DE ✅ Idempotente
-
-# 3. Traducciones de Experiences
-node scripts/seed-experiences-english.js  # EN ✅ Idempotente
-node scripts/seed-italian-content.js      # IT Experiences
-node scripts/seed-german-content.js       # DE Experiences
-
-# 4. Single Types (Hero, About)
-node scripts/seed-hero-about-automated.js # IT/DE ✅ Idempotente
-
-# 5. Verificar resultado
+# Verificar
 node scripts/verify-completion.js
 ```
 
 ---
 
-## 📋 Inventario de Scripts
+## 📋 Scripts de Seed (Production-Ready)
 
-### Scripts Principales (Producción Ready)
+### Contenido Base
 
-| Script | Función | Idempotente |
-|--------|---------|:-----------:|
-| `seed-all.js` | Script maestro que ejecuta todo | ✅ |
-| `seed-english-content.js` | Packages ES → EN | ✅ |
-| `seed-experiences-english.js` | Experiences ES → EN | ✅ |
-| `seed-italian-packages.js` | Packages ES → IT | ✅ |
-| `seed-german-packages.js` | Packages ES → DE | ✅ |
-| `seed-hero-about-automated.js` | Hero/About IT,DE | ✅ |
-| `verify-completion.js` | Auditoría de estado | N/A |
+**`create-spanish-content.js`**
+- Crea contenido español (ES) - locale por defecto
+- Packages (7), Experiences (6), Hero Section, About Page
+- **Requisito**: Ejecutar primero siempre
 
-### Scripts de Contenido
+**`upload-images.js`**
+- Sube imágenes desde `downloads/` a Strapi Media Library
+- Vincula automáticamente a packages y experiences
+- 26 imágenes totales (thumbnails + heroes)
 
-| Script | Función |
-|--------|---------|
-| `create-spanish-content.js` | Crea contenido base en español |
-| `seed-italian-content.js` | Experiences ES → IT |
-| `seed-german-content.js` | Experiences ES → DE |
+### Traducciones - Inglés
 
-### Scripts de Utilidad
+**`seed-english-content.js`** ✅ Idempotente
+- Crea traducciones EN de 7 packages
+- Usa PUT con documentId (comparte con ES)
+- Preserva thumbnail y heroImage IDs
 
-| Script | Función |
-|--------|---------|  
-| `delete-english-content.js` | 🗑️ Elimina contenido EN (Packages + Experiences) |
-| `publish-english-content.js` | Publica contenido EN (draft → published) |
+**`seed-experiences-english.js`** ✅ Idempotente
+- Crea traducciones EN de 6 experiences
+- Usa PUT con documentId
+- Preserva imágenes de español
 
-### Scripts de Imágenes
+### Traducciones - Italiano
 
-| Script | Función |
-|--------|---------|
-| `upload-images.js` | Sube imágenes a Strapi Media |
-| `populate-gallery-images.js` | Asigna imágenes a galerías |
-| `seed-itinerary-images.js` | Asigna imágenes a itinerarios |
-| `sync-frontend-images.js` | Sincroniza con frontend |
-| `migrate-itinerary-images.js` | Migra estructura de imágenes |
-| `assign-existing-images.js` | Re-asigna imágenes existentes |
+**`seed-italian-packages.js`** ✅ Idempotente
+- Crea traducciones IT de 7 packages
+- Comparte documentId con ES
+- Diccionario de traducciones incluido
 
-### Scripts de Mantenimiento
+**`seed-italian-content.js`** ✅ Idempotente
+- Crea traducciones IT de 6 experiences
+- Usa PUT con documentId (no POST)
+- Preserva thumbnail y heroImage de ES
 
-| Script | Función |
-|--------|---------|
-| `fix-package-experience-relations.js` | Corrige relaciones rotas |
-| `restore-packages.js` | Restaura desde backup |
-| `migrate-data.js` | Migración general |
+### Traducciones - Alemán
+
+**`seed-german-packages.js`** ✅ Idempotente
+- Crea traducciones DE de 7 packages
+- Comparte documentId con ES
+- Diccionario de traducciones incluido
+
+**`seed-german-content.js`** ✅ Idempotente
+- Crea traducciones DE de 6 experiences
+- Usa PUT con documentId
+- Preserva imágenes de español
+
+### Verificación
+
+**`verify-completion.js`**
+- Audita estado de contenido por locale
+- Reporta packages, experiences, hero, about
+- Valida que todos tengan mismos documentIds
 
 ---
 
-## ⚙️ Requisitos Previos
+## 🧹 Scripts de Utilidad
 
-### 1. Strapi ejecutándose
+### Limpieza
 
-```bash
-cd dolovibes-backend
-npm run develop
+**`delete-english-content.js`**
+- Elimina todos los packages y experiences EN
+- Útil para resetear traducciones inglesas
+
+**`delete-duplicate-packages.js`**
+- Encuentra packages con documentIds que no existen en ES
+- Elimina duplicados de IT/DE creados incorrectamente
+
+**`delete-experiences-it-de.js`**
+- Elimina experiences IT/DE con documentIds incorrectos
+- Para limpiar antes de recrear como traducciones
+
+### Sincronización
+
+**`sync-package-order.js`** ✅ Preserva imágenes
+- Sincroniza displayOrder en todos los locales
+- Actualizado para NO borrar thumbnail/heroImage
+
+### Desarrollo (No usar en producción)
+
+**`test-link.js`** - Test de endpoints
+**`test-upload.js`** - Test de subida de imágenes
+
+---
+
+## 🌍 Arquitectura i18n
+
+### Concepto: documentId
+
+En Strapi 5, las traducciones comparten el mismo `documentId`:
+
+```javascript
+// ES (original)
+{ id: 123, documentId: "abc123", slug: "navidad-en-los-dolomitas", locale: "es" }
+
+// EN (traducción)
+{ id: 456, documentId: "abc123", slug: "navidad-en-los-dolomitas", locale: "en" }
+
+// IT (traducción)
+{ id: 789, documentId: "abc123", slug: "navidad-en-los-dolomitas", locale: "it" }
 ```
 
-### 2. Token de API configurado
+**Key**: El `slug` es el MISMO para todas las localizaciones. Strapi maneja las versiones por idioma internamente.
 
-```env
-# .env
-STRAPI_API_TOKEN=tu_token_aqui
+### Patrón de Idempotencia
+
+```javascript
+// ❌ MAL: POST crea duplicados
+await axios.post(`${STRAPI_URL}/api/packages`, { data: { locale: "en", ... } });
+
+// ✅ BIEN: PUT con documentId crea O actualiza
+await axios.put(
+  `${STRAPI_URL}/api/packages/${esPackage.documentId}?locale=en`,
+  { data: translatedData }
+);
 ```
 
-Obtener token: Admin → Settings → API Tokens → Create (Full access)
+### Fallback de Imágenes (Frontend)
 
-### 3. Locales configurados en Strapi Admin
+El frontend (`api.js`) usa `enrichWithSpanishMedia()`:
+1. Agrupa packages/experiences por `documentId`
+2. Si un locale no tiene thumbnail/heroImage
+3. Busca el mismo `documentId` en español (ES)
+4. Copia las imágenes de ES → locale sin imagen
 
-**IMPORTANTE**: Antes de ejecutar scripts, configura los locales:
-
-1. Ve a `http://localhost:1337/admin`
-2. Settings → Internationalization → Locales
-3. Asegúrate de tener:
-   - ✅ Español (es) - Default
-   - ✅ English (en)
-   - ✅ Italiano (it)
-   - ✅ Deutsch (de)
+**Resultado**: Aunque IT/DE no tengan imágenes en Strapi, se ven en el sitio.
 
 ---
 
 ## 📊 Estado Esperado
 
-Después de ejecutar `node scripts/seed-all.js`:
+Después de ejecutar todos los scripts:
 
 ```
-┌─────────────────┬─────┬─────┬─────┬─────┬──────────┐
-│ Content Type    │  ES │  EN │  IT │  DE │ Estado   │
-├─────────────────┼─────┼─────┼─────┼─────┼──────────┤
-│ Packages        │  8  │  7  │  7  │  7  │  ✅ 100% │
-│ Experiences     │  6  │  6  │  6  │  6  │  ✅ 100% │
-│ Hero Section    │  1  │  1  │  1  │  1  │  ✅ 100% │
-└─────────────────┴─────┴─────┴─────┴─────┴──────────┘
+┌─────────────────┬─────┬─────┬─────┬─────┐
+│ Content Type    │  ES │  EN │  IT │  DE │
+├─────────────────┼─────┼─────┼─────┼─────┤
+│ Packages        │  7  │  7  │  7  │  7  │
+│ Experiences     │  6  │  6  │  6  │  6  │
+│ Hero Section    │  1  │  1  │  1  │  1  │
+│ About Page      │  1  │  1  │  1  │  1  │
+└─────────────────┴─────┴─────┴─────┴─────┘
+```
+
+**Packages** (slug base):
+1. `navidad-en-los-dolomitas`
+2. `esqui-exclusivo-dolimiti`
+3. `experiencia-patrimonio-unesco`
+4. `via-ferrata-pasion`
+5. `hut-to-hut-trekking`
+6. `city-lights-norte-italia`
+7. `navidad-mercados-bolzano`
+
+**Experiences** (slug base):
+1. `hut-2-hut`
+2. `ski-touring`
+3. `via-ferrata`
+4. `cultural-tour`
+5. `hiking-trails`
+6. `dolomites-ski-resort`
+
+---
+
+## ⚙️ Requisitos Previos
+
+1. **Strapi ejecutándose**
+   ```bash
+   cd dolovibes-backend
+   npm run develop
+   ```
+
+2. **Token de API configurado**
+   ```env
+   # .env
+   STRAPI_API_TOKEN=tu_token_aqui
+   ```
+   Generar en: Admin → Settings → API Tokens → Create (Full access)
+
+3. **Locales habilitados**
+   - Ir a http://localhost:1337/admin
+   - Settings → Internationalization → Locales
+   - Verificar: `es` (default), `en`, `it`, `de`
+
+4. **Permisos públicos**
+   - Settings → Users & Permissions → Roles → Public
+   - Habilitar `find` y `findOne` para: Experience, Package, Hero Section, About Page
+
+---
+
+## 🔧 Orden de Ejecución
+
+**Primer Setup (base de datos vacía):**
+```bash
+node scripts/create-spanish-content.js      # 1. Base ES
+node scripts/upload-images.js               # 2. Subir imágenes
+node scripts/seed-english-content.js        # 3. Packages EN
+node scripts/seed-experiences-english.js    # 4. Experiences EN
+node scripts/seed-italian-packages.js       # 5. Packages IT
+node scripts/seed-italian-content.js        # 6. Experiences IT
+node scripts/seed-german-packages.js        # 7. Packages DE
+node scripts/seed-german-content.js         # 8. Experiences DE
+node scripts/verify-completion.js           # 9. Verificar
+```
+
+**Re-ejecutar traducciones (seguro):**
+```bash
+# Todos los seed scripts marcados con ✅ son idempotentes
+node scripts/seed-english-content.js        # Safe
+node scripts/seed-italian-packages.js       # Safe
+# etc...
+```
+
+**Sincronizar orden:**
+```bash
+node scripts/sync-package-order.js
+# Actualiza displayOrder en ES, EN, IT, DE
+# Ya preserva imágenes correctamente
 ```
 
 ---
 
-## 🔧 Patrón de Idempotencia (Strapi 5)
+## 🚨 Troubleshooting
 
-Los scripts usan este patrón para ser idempotentes:
+### Error: "documentId not found"
+- Ejecuta primero `create-spanish-content.js`
+- Los scripts EN/IT/DE requieren contenido ES existente
 
-```javascript
-// PUT con documentId + ?locale crea O actualiza
-await axios.put(
-  `${STRAPI_URL}/api/packages/${pkg.documentId}?locale=it`,
-  { data: translatedData }
-);
-```
+### Error: "STRAPI_API_TOKEN no configurado"
+- Revisa tu archivo `.env`
+- Genera nuevo token en Strapi Admin
 
-**Clave**: El `slug` es el MISMO para todas las localizaciones. Strapi maneja internamente las versiones por idioma.
+### Las imágenes desaparecen después de sync
+- Ya está corregido en `sync-package-order.js`
+- Re-ejecuta `upload-images.js` si es necesario
 
----
-
-## 🌐 Locales Soportados
-
-| Código | Idioma | Target |
-|--------|--------|--------|
-| `es` | Español | Mercado MX (base) |
-| `en` | English | Internacional |
-| `it` | Italiano | 75% turismo Dolomitas |
-| `de` | Deutsch | 75% turismo Dolomitas |
+### Locale no existe en Strapi
+- Settings → Internationalization → Add locale
+- Código ISO 639-1: `es`, `en`, `it`, `de`
 
 ---
 
-## 📝 Notas Técnicas
+## 📚 Referencias
 
-- Strapi 5: Single Types usan `PUT /api/{type}?locale={code}`, NO `POST /localizations`
-- Los scripts validan campos contra el schema de cada content type
-- Packages de prueba (ej: `test-en-pkg`) se omiten automáticamente
-- Pequeña pausa entre operaciones para no sobrecargar Strapi (500ms)
+- Documentación principal: [../README.md](../README.md)
+- Guía de Marketing: [../docs/GUIA-MARKETING.md](../docs/GUIA-MARKETING.md)
+- Strapi i18n: https://docs.strapi.io/dev-docs/plugins/i18n
