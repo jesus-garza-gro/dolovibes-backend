@@ -199,32 +199,52 @@ const PACKAGE_TRANSLATIONS = {
 // FUNCIONES AUXILIARES
 // ═══════════════════════════════════════════════════════════════
 
+async function checkIfEnglishPackageExists(slug) {
+    try {
+        const response = await axios.get(`${STRAPI_URL}/api/packages`, {
+            params: {
+                locale: 'en',
+                filters: { slug: { $eq: slug } },
+                pagination: { pageSize: 1 },
+            },
+            headers: authHeaders,
+        });
+        return response.data.data.length > 0 ? response.data.data[0] : null;
+    } catch (error) {
+        return null;
+    }
+}
+
 async function getPackagesInSpanish() {
-    const response = await axios.get(`${STRAPI_URL}/api/packages`, {
-        params: {
-            locale: 'es',
-            'populate[itinerary][populate]': 'image',
-            'populate[includes]': true,
-            'populate[notIncludes]': true,
-            'populate[gallery][populate]': 'image',
-            'populate[tags]': true,
-            'populate[thumbnail]': true,
-            'populate[heroImage]': true,
-            'populate[startDates]': true,
-            'populate[locationInfo]': true,
-            'populate[seo]': true,
-            'pagination[pageSize]': 100,
-        },
-        headers: authHeaders,
-    });
-    return response.data.data;
+    try {
+        const response = await axios.get(`${STRAPI_URL}/api/packages`, {
+            params: {
+                locale: 'es',
+                'populate[itinerary][populate]': 'image',
+                'populate[includes]': true,
+                'populate[notIncludes]': true,
+                'populate[gallery][populate]': 'image',
+                'populate[tags]': true,
+                'populate[thumbnail]': true,
+                'populate[heroImage]': true,
+                'pagination[pageSize]': 100,
+            },
+            headers: authHeaders,
+        });
+        return response.data.data;
+    } catch (error) {
+        console.error('❌ Error al obtener paquetes:', error.message);
+        throw error;
+    }
 }
 
 async function createEnglishVersion(pkg, translation) {
+    console.log(`\n📦 Procesando: ${pkg.title} (${pkg.slug})`);
+
     // Preparar datos para la versión en inglés
     const englishData = {
         title: translation.title,
-        slug: `${pkg.slug}-en`, // Slug en inglés
+        slug: pkg.slug,  // ✅ Mismo slug para todas las localizaciones
         location: translation.location,
         duration: translation.duration,
         description: translation.description,
@@ -232,7 +252,6 @@ async function createEnglishVersion(pkg, translation) {
         groupSize: translation.groupSize || pkg.groupSize,
         guideType: translation.guideType || pkg.guideType,
         availableDates: translation.availableDates || pkg.availableDates,
-        // Campos no traducibles (se mantienen igual)
         priceAmount: pkg.priceAmount,
         originalPriceAmount: pkg.originalPriceAmount,
         rating: pkg.rating,
@@ -271,101 +290,117 @@ async function createEnglishVersion(pkg, translation) {
         }));
     }
 
-    // Tags (se mantienen igual pero podrían traducirse)
+    // Tags (mantener igual)
     if (pkg.tags) {
         englishData.tags = pkg.tags.map(t => ({ name: t.name }));
     }
 
-    // Verificar si ya existe versión en inglés
-    try {
-        const enResponse = await axios.get(`${STRAPI_URL}/api/packages`, {
-            params: {
-                locale: 'en',
-                'filters[slug][$eq]': pkg.slug,
-            },
-            headers: authHeaders,
-        });
+    // Thumbnails y heroImage
+    if (pkg.thumbnail?.id) {
+        englishData.thumbnail = pkg.thumbnail.id;
+    }
+    if (pkg.heroImage?.id) {
+        englishData.heroImage = pkg.heroImage.id;
+    }
 
-        if (enResponse.data.data.length > 0) {
-            // Ya existe, actualizar
-            const enPkg = enResponse.data.data[0];
-            await axios.put(
-                `${STRAPI_URL}/api/packages/${enPkg.documentId}`,
-                { data: englishData },
-                { headers: { ...authHeaders, 'Content-Type': 'application/json' } }
-            );
-            return { updated: true };
+    try {
+        // ✅ PUT con documentId y locale es IDEMPOTENTE en Strapi 5
+        const existing = await checkIfEnglishPackageExists(pkg.slug);
+        const action = existing ? 'actualizado' : 'creado';
+
+        if (existing) {
+            console.log(`♻️  Ya existe en inglés: ${translation.title} (actualizando...)`);
         }
 
-        // No existe, crear nueva localización directamente
-        const response = await axios.post(
-            `${STRAPI_URL}/api/packages`,
+        const response = await axios.put(
+            `${STRAPI_URL}/api/packages/${pkg.documentId}?locale=en`,
+            { data: englishData },
             {
-                data: englishData
-            },
-            {
-                headers: { ...authHeaders, 'Content-Type': 'application/json' },
-                params: {
-                    locale: 'en'
+                headers: {
+                    ...authHeaders,
+                    'Content-Type': 'application/json'
                 }
             }
         );
-        return response.data;
+
+        console.log(`✅ ${action.charAt(0).toUpperCase() + action.slice(1)} en inglés: ${translation.title}`);
+        return { created: true, updated: !!existing, id: response.data.data?.id };
+
     } catch (error) {
-        throw error;
+        console.error(`❌ Error al crear versión inglesa: ${error.response?.data?.error?.message || error.message}`);
+        return { created: false, error: error.message };
     }
 }
 
 // ═══════════════════════════════════════════════════════════════
-// MAIN
+// PROCESO PRINCIPAL
 // ═══════════════════════════════════════════════════════════════
 
-async function main() {
-    console.log('\n═══════════════════════════════════════════════════════════');
-    console.log('  SEED DE CONTENIDO EN INGLÉS');
-    console.log('═══════════════════════════════════════════════════════════\n');
+async function seedEnglishPackages() {
+    console.log('\n╔════════════════════════════════════════════════════╗');
+    console.log('║  🇬🇧 SEED DE PAQUETES EN INGLÉS - IDEMPOTENTE      ║');
+    console.log('╚════════════════════════════════════════════════════╝\n');
 
     if (!STRAPI_API_TOKEN) {
         console.log('❌ Error: STRAPI_API_TOKEN no configurado');
         process.exit(1);
     }
 
-    console.log('ℹ️  Obteniendo paquetes en español...\n');
-    const packages = await getPackagesInSpanish();
-    console.log(`📦 Encontrados ${packages.length} paquetes\n`);
+    try {
+        // 1. Obtener todos los paquetes en español
+        console.log('📥 Obteniendo paquetes en español...');
+        const spanishPackages = await getPackagesInSpanish();
+        console.log(`✓ ${spanishPackages.length} paquetes encontrados\n`);
 
-    let created = 0;
-    let skipped = 0;
-    let errors = 0;
+        // 2. Crear versiones en inglés
+        const results = [];
+        for (const pkg of spanishPackages) {
+            const translation = PACKAGE_TRANSLATIONS[pkg.slug];
 
-    for (const pkg of packages) {
-        const translation = PACKAGE_TRANSLATIONS[pkg.slug];
-
-        if (!translation) {
-            console.log(`⏭️  ${pkg.title}: Sin traducción definida, saltando`);
-            skipped++;
-            continue;
+            if (translation) {
+                const result = await createEnglishVersion(pkg, translation);
+                results.push({
+                    slug: pkg.slug,
+                    title: pkg.title,
+                    ...result,
+                });
+                // Pequeña pausa para no sobrecargar Strapi
+                await new Promise(resolve => setTimeout(resolve, 500));
+            } else {
+                console.log(`⚠️  No hay traducción para: ${pkg.slug}`);
+            }
         }
 
-        console.log(`\n🌐 ${pkg.title} → ${translation.title}`);
+        // 3. Resumen
+        console.log('\n' + '═'.repeat(56));
+        console.log('📊 RESUMEN DE CREACIÓN');
+        console.log('═'.repeat(56));
 
-        try {
-            await createEnglishVersion(pkg, translation);
-            console.log(`   ✅ Versión en inglés creada`);
-            created++;
-        } catch (error) {
-            console.log(`   ❌ Error: ${error.response?.data?.error?.message || error.message}`);
-            errors++;
+        const created = results.filter(r => r.created && !r.updated);
+        const updated = results.filter(r => r.created && r.updated);
+        const failed = results.filter(r => !r.created);
+
+        console.log(`✅ Creados: ${created.length}`);
+        console.log(`♻️  Actualizados: ${updated.length}`);
+        console.log(`❌ Fallidos: ${failed.length}`);
+
+        if (failed.length > 0) {
+            console.log('\n⚠️  Paquetes con errores:');
+            failed.forEach(f => console.log(`   - ${f.title} (${f.slug})`));
         }
+
+        console.log('\n✨ Proceso completado!\n');
+
+    } catch (error) {
+        console.error('\n💥 Error fatal:', error.message);
+        process.exit(1);
     }
-
-    console.log('\n═══════════════════════════════════════════════════════════');
-    console.log('  RESUMEN');
-    console.log('═══════════════════════════════════════════════════════════');
-    console.log(`  ✅ Creados:   ${created}`);
-    console.log(`  ⏭️  Saltados: ${skipped}`);
-    console.log(`  ❌ Errores:   ${errors}`);
-    console.log('═══════════════════════════════════════════════════════════\n');
 }
 
-main().catch(console.error);
+// Ejecutar
+if (require.main === module) {
+    seedEnglishPackages();
+}
+
+module.exports = { seedEnglishPackages };
+
