@@ -117,20 +117,55 @@ Este directorio contiene scripts para poblar y gestionar el contenido en Strapi.
 - **upload-images.js** - Sube imágenes a Strapi
 - **populate-gallery-images.js** - Asigna imágenes a galerías
 - **seed-itinerary-images.js** - Asigna imágenes a itinerarios
+## 📋 Scripts de Utilidad
+
+- **verify-completion.js** ✅ - Verifica estado de traduciones
+  ```bash
+  node scripts/verify-completion.js
+  ```
+  - Muestra tabla con conteo por locale (ES/EN/IT/DE)
+  - Útil para auditar progreso de i18n
+
+- **check-missing.js** - Identifica contenido faltante por locale
+  ```bash
+  node scripts/check-missing.js
+  ```
+  - Compara ES vs EN y muestra packages sin traducir
+  
+- **cleanup-duplicates.js** - Elimina paquetes duplicados
+  ```bash
+  node scripts/cleanup-duplicates.js
+  ```
+  - Limpia paquetes con títulos en inglés pero locale='es'
+
+- **publish-english-content.js** - Publica contenido inglés
+  ```bash
+  node scripts/publish-english-content.js
+  ```
+  - Cambia estado de draft a published para locale EN
+
+## 🖼️ Scripts de Imágenes
+
+- **upload-images.js** - Sube imágenes a Strapi
+- **populate-gallery-images.js** - Asigna imágenes a galerías
+- **seed-itinerary-images.js** - Asigna imágenes a itinerarios
 - **sync-frontend-images.js** - Sincroniza imágenes con frontend
 - **migrate-itinerary-images.js** - Migra imágenes de itinerarios
+- **assign-existing-images.js** - Asigna imágenes existentes
 
 ## 🔧 Scripts de Mantenimiento
 
-- **fix-package-experience-relations.js** - Corrige relaciones
-- **cleanup-duplicates.js** - Elimina duplicados
+- **fix-package-experience-relations.js** - Corrige relaciones entre packages y experiences
 - **restore-packages.js** - Restaura packages desde backup
-- **assign-existing-images.js** - Asigna imágenes existentes
+- **migrate-data.js** - Migración general de datos
+- **create-spanish-sql.js** - Generación SQL (legacy, posiblemente obsoleto)
 
-## 🧪 Scripts de Prueba
+## 🧪 Scripts de Prueba (Desarrollo)
 
-- **test-link.js** - Prueba enlaces
+- **test-link.js** - Prueba vinculación de imágenes
 - **test-upload.js** - Prueba subida de archivos
+
+> **Nota**: Los scripts de prueba son para desarrollo/debugging y pueden eliminarse en producción
 
 ## ⚙️ Requisitos Previos
 
