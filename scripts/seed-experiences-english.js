@@ -19,45 +19,41 @@ if (fs.existsSync(envPath)) {
 
 const authHeaders = { 'Authorization': `Bearer ${STRAPI_API_TOKEN}` };
 
+// Traducciones de Experiences (ES → EN)
+// Nota: El slug se mantiene igual que el de ES (exp.slug), solo se traduce el contenido
 const TRANSLATIONS = {
     'hut-2-hut': {
         title: 'Hut 2 Hut',
-        slug: 'hut-2-hut-en',
         season: 'summer',
         shortDescription: 'Sleep in traditional mountain huts and wake up to breathtaking alpine views.',
         longDescription: 'Experience the authentic Dolomites by trekking from refuge to refuge. Each night you\'ll stay in a cozy mountain hut with stunning views, hearty local cuisine, and the camaraderie of fellow hikers. This is the classic Alpine adventure.',
     },
     'hiking': {
         title: 'Hiking',
-        slug: 'hiking-en',
         season: 'summer',
         shortDescription: 'Discover the Dolomites through accessible trails perfect for all levels.',
         longDescription: 'Our hiking tours are designed for those who want to explore the beauty of the mountains at a comfortable pace. With expert guides, we\'ll take you to the most scenic viewpoints and hidden gems of the region.',
     },
     'city-lights': {
         title: 'City Lights',
-        slug: 'city-lights-en',
         season: 'summer',
         shortDescription: 'Explore the charming cities and villages of northern Italy.',
         longDescription: 'Immerse yourself in Italian culture, art, and gastronomy. From Venice canals to Verona\'s ancient streets, discover the rich heritage and vibrant life of northern Italy\'s most beautiful cities.',
     },
     'ski-pull': {
         title: 'Ski Pull',
-        slug: 'ski-pull-en',
         season: 'winter',
         shortDescription: 'Glide through pristine winter landscapes on Nordic skiing trails.',
         longDescription: 'Cross-country skiing offers a peaceful way to explore the snow-covered Dolomites. Perfect for those seeking winter tranquility combined with a great workout in spectacular alpine scenery.',
     },
     'ski-family': {
         title: 'Ski Family',
-        slug: 'ski-family-en',
         season: 'winter',
         shortDescription: 'Perfect ski vacations for the whole family with all amenities included.',
         longDescription: 'Create unforgettable family memories in the snow. Our family packages include ski lessons for all ages, childcare options, family-friendly accommodations, and activities everyone will enjoy.',
     },
     'navidad': {
         title: 'Christmas',
-        slug: 'navidad-en',
         season: 'winter',
         shortDescription: 'Experience the magic of South Tyrolean Christmas markets and traditions.',
         longDescription: 'Step into a winter wonderland during the festive season. Stroll through enchanting Christmas markets, sample mulled wine and traditional treats, and experience authentic Alpine holiday traditions.',
@@ -113,7 +109,7 @@ async function seedExperiences() {
             });
 
             const exists = checkEn.data.data.length > 0;
-            
+
             // Preparar datos EN (conservar imágenes de ES)
             const englishData = {
                 title: translation.title,
@@ -134,7 +130,7 @@ async function seedExperiences() {
 
             if (exists) {
                 console.log(`♻️  Ya existe en inglés (actualizando...)`);
-                
+
                 // PUT para actualizar
                 await axios.put(
                     `${STRAPI_URL}/api/experiences/${exp.documentId}?locale=en`,
@@ -143,12 +139,12 @@ async function seedExperiences() {
                         headers: { ...authHeaders, 'Content-Type': 'application/json' }
                     }
                 );
-                
+
                 console.log(`✅ Actualizado: ${translation.title}`);
                 updated++;
             } else {
                 console.log(`🆕 Creando traducción EN usando documentId: ${exp.documentId}`);
-                
+
                 // PUT con documentId para crear traducción (NO documento nuevo)
                 await axios.put(
                     `${STRAPI_URL}/api/experiences/${exp.documentId}?locale=en`,
@@ -157,14 +153,14 @@ async function seedExperiences() {
                         headers: { ...authHeaders, 'Content-Type': 'application/json' }
                     }
                 );
-                
+
                 console.log(`✅ Creado: ${translation.title}`);
                 created++;
             }
-            
+
             // Pausa para no sobrecargar Strapi
             await new Promise(resolve => setTimeout(resolve, 500));
-            
+
         } catch (error) {
             console.log(`❌ Error: ${error.response?.data?.error?.message || error.message}`);
             errors++;
