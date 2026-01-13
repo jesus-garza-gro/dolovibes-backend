@@ -4,16 +4,34 @@ Este directorio contiene scripts para poblar y gestionar el contenido en Strapi.
 
 ## � Scripts Idempotentes
 
-**Todos los scripts son idempotentes**: pueden ejecutarse múltiples veces de forma segura.
-- Si el contenido ya existe: se actualiza
-- Si el contenido no existe: se crea nuevo
-- No se crean duplicados
+**✅ Todos los scripts principales son 100% idempotentes**: pueden ejecutarse múltiples veces de forma segura.
 
-Esto permite:
-- Re-ejecutar scripts sin preocupaciones
-- Actualizar traducciones existentes
-- Recuperarse de ejecuciones interrumpidas
-- Poblar ambientes (dev, staging, producción) múltiples veces
+### Cómo funciona:
+- **Primera ejecución**: Crea contenido nuevo
+- **Ejecuciones posteriores**: Detecta contenido existente y lo actualiza
+- **Sin duplicados**: Usa `documentId` + `?locale` para identificar y actualizar
+- **Mensajes claros**: Muestra ♻️ cuando actualiza, ✅ cuando crea
+
+### Ejemplo de salida:
+```bash
+📦 Procesando: Hut 2 Hut - Dolomitas Clásico
+♻️  Ya existe en italiano: Rifugio 2 Rifugio - Dolomiti Classiche (actualizando...)
+✅ Actualizado en italiano: Rifugio 2 Rifugio - Dolomiti Classiche
+
+════════════════════════════════════════════════════════
+📊 RESUMEN DE CREACIÓN
+════════════════════════════════════════════════════════
+✅ Creados: 0
+♻️  Actualizados: 7
+❌ Fallidos: 0
+```
+
+### Beneficios:
+- ✅ Re-ejecutar scripts sin preocupaciones
+- ✅ Actualizar traducciones existentes fácilmente
+- ✅ Recuperarse de ejecuciones interrumpidas
+- ✅ Poblar múltiples ambientes (dev, staging, producción)
+- ✅ CI/CD friendly: se puede automatizar sin riesgo
 
 ## �🚀 Scripts de Población Principal (Para nuevas instalaciones)
 
