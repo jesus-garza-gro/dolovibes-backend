@@ -1,0 +1,3 @@
+# Esta carpeta almacena imágenes temporales para subir a Strapi
+# Las imágenes deben colocarse aquí manualmente antes de ejecutar el script upload-images.js
+# Esta carpeta está ignorada en .gitignore porque las imágenes son pesadas y se suben a Strapi

@@ -134,4 +134,8 @@ build
 # Downloads (imágenes temporales)
 ############################
 
-downloads/
+downloads/*
+!downloads/experiences/
+!downloads/packages/
+!downloads/experiences/.gitkeep
+!downloads/packages/.gitkeep
