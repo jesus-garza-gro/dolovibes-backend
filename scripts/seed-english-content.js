@@ -304,27 +304,44 @@ async function createEnglishVersion(pkg, translation) {
     }
 
     try {
-        // ✅ PUT con documentId y locale es IDEMPOTENTE en Strapi 5
+        // ✅ Verificar si ya existe la traducción EN
         const existing = await checkIfEnglishPackageExists(pkg.slug);
-        const action = existing ? 'actualizado' : 'creado';
-
+        
         if (existing) {
+            // PUT para actualizar la traducción existente
             console.log(`♻️  Ya existe en inglés: ${translation.title} (actualizando...)`);
-        }
-
-        const response = await axios.put(
-            `${STRAPI_URL}/api/packages/${pkg.documentId}?locale=en`,
-            { data: englishData },
-            {
-                headers: {
-                    ...authHeaders,
-                    'Content-Type': 'application/json'
+            
+            const response = await axios.put(
+                `${STRAPI_URL}/api/packages/${pkg.documentId}?locale=en`,
+                { data: englishData },
+                {
+                    headers: {
+                        ...authHeaders,
+                        'Content-Type': 'application/json'
+                    }
                 }
-            }
-        );
-
-        console.log(`✅ ${action.charAt(0).toUpperCase() + action.slice(1)} en inglés: ${translation.title}`);
-        return { created: true, updated: !!existing, id: response.data.data?.id };
+            );
+            
+            console.log(`✅ Actualizado en inglés: ${translation.title}`);
+            return { created: true, updated: true, id: response.data.data?.id };
+        } else {
+            // PUT con documentId de ES para crear traducción (NO documento nuevo)
+            console.log(`🆕 Creando traducción EN para: ${translation.title}`);
+            
+            const response = await axios.put(
+                `${STRAPI_URL}/api/packages/${pkg.documentId}?locale=en`,
+                { data: englishData },
+                {
+                    headers: {
+                        ...authHeaders,
+                        'Content-Type': 'application/json'
+                    }
+                }
+            );
+            
+            console.log(`✅ Creado en inglés: ${translation.title}`);
+            return { created: true, updated: false, id: response.data.data?.id };
+        }
 
     } catch (error) {
         console.error(`❌ Error al crear versión inglesa: ${error.response?.data?.error?.message || error.message}`);

@@ -65,20 +65,31 @@ const TRANSLATIONS = {
 };
 
 async function seedExperiences() {
-    console.log('\n═══════════════════════════════════════════════════════════');
-    console.log('  SEED DE EXPERIENCES EN INGLÉS');
-    console.log('═══════════════════════════════════════════════════════════\n');
+    console.log('\n╔════════════════════════════════════════════════════╗');
+    console.log('║  🇬🇧 SEED DE EXPERIENCES EN INGLÉS - IDEMPOTENTE  ║');
+    console.log('╚════════════════════════════════════════════════════╝\n');
+
+    if (!STRAPI_API_TOKEN) {
+        console.log('❌ Error: STRAPI_API_TOKEN no configurado');
+        process.exit(1);
+    }
 
     // Obtener experiences en español
     const response = await axios.get(`${STRAPI_URL}/api/experiences`, {
-        params: { locale: 'es', 'pagination[pageSize]': 100 },
+        params: {
+            locale: 'es',
+            'populate[thumbnail]': true,
+            'populate[heroImage]': true,
+            'pagination[pageSize]': 100
+        },
         headers: authHeaders,
     });
 
     const experiences = response.data.data;
-    console.log(`📦 Encontradas ${experiences.length} experiences\n`);
+    console.log(`📦 Encontradas ${experiences.length} experiences en español\n`);
 
     let created = 0;
+    let updated = 0;
     let errors = 0;
 
     for (const exp of experiences) {
@@ -89,10 +100,10 @@ async function seedExperiences() {
             continue;
         }
 
-        console.log(`🌐 ${exp.title} → ${translation.title}`);
+        console.log(`\n📦 Procesando: ${exp.title} → ${translation.title}`);
 
         try {
-            // Verificar si ya existe
+            // Verificar si ya existe la traducción EN
             const checkEn = await axios.get(`${STRAPI_URL}/api/experiences`, {
                 params: {
                     locale: 'en',
@@ -101,35 +112,76 @@ async function seedExperiences() {
                 headers: authHeaders,
             });
 
-            if (checkEn.data.data.length > 0) {
-                console.log(`   ⏭️  Ya existe\n`);
-                continue;
+            const exists = checkEn.data.data.length > 0;
+            
+            // Preparar datos EN (conservar imágenes de ES)
+            const englishData = {
+                title: translation.title,
+                slug: exp.slug,  // Mismo slug que ES
+                season: translation.season,
+                shortDescription: translation.shortDescription,
+                longDescription: translation.longDescription,
+                difficulty: exp.difficulty,
+            };
+
+            // Conservar IDs de imágenes de ES
+            if (exp.thumbnail?.id) {
+                englishData.thumbnail = exp.thumbnail.id;
+            }
+            if (exp.heroImage?.id) {
+                englishData.heroImage = exp.heroImage.id;
             }
 
-            // Crear versión en inglés
-            await axios.post(
-                `${STRAPI_URL}/api/experiences`,
-                { data: translation },
-                {
-                    headers: { ...authHeaders, 'Content-Type': 'application/json' },
-                    params: { locale: 'en' }
-                }
-            );
-
-            console.log(`   ✅ Creada\n`);
-            created++;
+            if (exists) {
+                console.log(`♻️  Ya existe en inglés (actualizando...)`);
+                
+                // PUT para actualizar
+                await axios.put(
+                    `${STRAPI_URL}/api/experiences/${exp.documentId}?locale=en`,
+                    { data: englishData },
+                    {
+                        headers: { ...authHeaders, 'Content-Type': 'application/json' }
+                    }
+                );
+                
+                console.log(`✅ Actualizado: ${translation.title}`);
+                updated++;
+            } else {
+                console.log(`🆕 Creando traducción EN usando documentId: ${exp.documentId}`);
+                
+                // PUT con documentId para crear traducción (NO documento nuevo)
+                await axios.put(
+                    `${STRAPI_URL}/api/experiences/${exp.documentId}?locale=en`,
+                    { data: englishData },
+                    {
+                        headers: { ...authHeaders, 'Content-Type': 'application/json' }
+                    }
+                );
+                
+                console.log(`✅ Creado: ${translation.title}`);
+                created++;
+            }
+            
+            // Pausa para no sobrecargar Strapi
+            await new Promise(resolve => setTimeout(resolve, 500));
+            
         } catch (error) {
-            console.log(`   ❌ Error: ${error.response?.data?.error?.message || error.message}\n`);
+            console.log(`❌ Error: ${error.response?.data?.error?.message || error.message}`);
             errors++;
         }
     }
 
-    console.log('═══════════════════════════════════════════════════════════');
-    console.log('  RESUMEN');
-    console.log('═══════════════════════════════════════════════════════════');
-    console.log(`  ✅ Creadas: ${created}`);
-    console.log(`  ❌ Errores: ${errors}`);
-    console.log('═══════════════════════════════════════════════════════════\n');
+    console.log('\n' + '═'.repeat(56));
+    console.log('📊 RESUMEN DE CREACIÓN');
+    console.log('═'.repeat(56));
+    console.log(`✅ Creados: ${created}`);
+    console.log(`♻️  Actualizados: ${updated}`);
+    console.log(`❌ Fallidos: ${errors}`);
+    console.log('\n✨ Proceso completado!\n');
 }
 
-seedExperiences().catch(console.error);
+if (require.main === module) {
+    seedExperiences().catch(console.error);
+}
+
+module.exports = { seedExperiences };

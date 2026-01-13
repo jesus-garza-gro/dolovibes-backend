@@ -41,7 +41,7 @@ node scripts/seed-italian-packages.js     # IT ✅ Idempotente
 node scripts/seed-german-packages.js      # DE ✅ Idempotente
 
 # 3. Traducciones de Experiences
-node scripts/seed-experiences-english.js  # EN
+node scripts/seed-experiences-english.js  # EN ✅ Idempotente
 node scripts/seed-italian-content.js      # IT Experiences
 node scripts/seed-german-content.js       # DE Experiences
 
@@ -62,6 +62,7 @@ node scripts/verify-completion.js
 |--------|---------|:-----------:|
 | `seed-all.js` | Script maestro que ejecuta todo | ✅ |
 | `seed-english-content.js` | Packages ES → EN | ✅ |
+| `seed-experiences-english.js` | Experiences ES → EN | ✅ |
 | `seed-italian-packages.js` | Packages ES → IT | ✅ |
 | `seed-german-packages.js` | Packages ES → DE | ✅ |
 | `seed-hero-about-automated.js` | Hero/About IT,DE | ✅ |
@@ -72,16 +73,14 @@ node scripts/verify-completion.js
 | Script | Función |
 |--------|---------|
 | `create-spanish-content.js` | Crea contenido base en español |
-| `seed-experiences-english.js` | Experiences ES → EN |
 | `seed-italian-content.js` | Experiences ES → IT |
 | `seed-german-content.js` | Experiences ES → DE |
 
 ### Scripts de Utilidad
 
 | Script | Función |
-|--------|---------|
-| `check-missing.js` | Identifica traducciones faltantes |
-| `cleanup-duplicates.js` | Elimina packages duplicados |
+|--------|---------|  
+| `delete-english-content.js` | 🗑️ Elimina contenido EN (Packages + Experiences) |
 | `publish-english-content.js` | Publica contenido EN (draft → published) |
 
 ### Scripts de Imágenes
