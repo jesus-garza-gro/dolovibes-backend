@@ -132,20 +132,37 @@ Este directorio contiene scripts para poblar y gestionar el contenido en Strapi.
 - **test-link.js** - Prueba enlaces
 - **test-upload.js** - Prueba subida de archivos
 
-## ⚙️ Requisitos
+## ⚙️ Requisitos Previos
 
-1. **Strapi ejecutándose en localhost:1337**
-   ```bash
-   cd /path/to/dolovibes-backend
-   npm run dev
-   ```
+### 1. **Configurar Internacionalización en Strapi Admin** ⚠️ IMPORTANTE
 
-2. **Variable de entorno STRAPI_API_TOKEN en .env**
-   ```env
-   STRAPI_API_TOKEN=tu_token_aqui
-   ```
+Antes de ejecutar cualquier script, debes configurar los locales en Strapi:
 
-3. **i18n configurado con locales: es, en, it, de**
+1. Accede al Admin de Strapi: `http://localhost:1337/admin`
+2. Ve a **Settings** → **Internationalization** → **Locales**
+3. Asegúrate de tener configurados los 4 locales:
+   - ✅ **Español (es)** - Locale por defecto
+   - ✅ **English (en)**
+   - ✅ **Italiano (it)**
+   - ✅ **Deutsch (de)**
+
+Si faltan locales, agrégalos con el botón **"Add new locale"**
+
+### 2. **Strapi ejecutándose en localhost:1337**
+```bash
+cd /path/to/dolovibes-backend
+npm run dev
+```
+
+### 3. **Variable de entorno STRAPI_API_TOKEN en .env**
+```env
+STRAPI_API_TOKEN=tu_token_aqui
+```
+
+Obtener el token:
+1. Admin → Settings → API Tokens → Create new API Token
+2. Tipo: **Full access**
+3. Copiar y pegar en `.env`
 
 ## 📦 Población Completa desde Cero
 
