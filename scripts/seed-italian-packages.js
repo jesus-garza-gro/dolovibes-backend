@@ -223,6 +223,22 @@ const PACKAGE_TRANSLATIONS_IT = {
 // FUNCIONES AUXILIARES
 // ═══════════════════════════════════════════════════════════════
 
+async function checkIfItalianPackageExists(slug) {
+    try {
+        const response = await axios.get(`${STRAPI_URL}/api/packages`, {
+            params: { 
+                locale: 'it',
+                filters: { slug: { $eq: slug } },
+                pagination: { pageSize: 1 },
+            },
+            headers: authHeaders,
+        });
+        return response.data.data.length > 0 ? response.data.data[0] : null;
+    } catch (error) {
+        return null;
+    }
+}
+
 async function getPackagesInSpanish() {
     try {
         const response = await axios.get(`${STRAPI_URL}/api/packages`, {
@@ -252,7 +268,7 @@ async function createItalianVersion(pkg, translation) {
     // Preparar datos para la versión en italiano
     const italianData = {
         title: translation.title,
-        slug: `${pkg.slug}-it`,
+        slug: pkg.slug,  // Mismo slug para todas las localizaciones
         location: translation.location,
         duration: translation.duration,
         description: translation.description,
@@ -265,7 +281,6 @@ async function createItalianVersion(pkg, translation) {
         rating: pkg.rating,
         hasDiscount: pkg.hasDiscount,
         season: pkg.season,
-        locale: 'it',
     };
 
     // Itinerario traducido (conservar IDs de imagen)
@@ -313,9 +328,17 @@ async function createItalianVersion(pkg, translation) {
     }
 
     try {
-        // Crear paquete en italiano
-        const response = await axios.post(
-            `${STRAPI_URL}/api/packages?locale=it`,
+        // En Strapi 5, PUT con documentId y locale crea o actualiza automáticamente
+        // Es inherentemente idempotente
+        const existing = await checkIfItalianPackageExists(pkg.slug);
+        const action = existing ? 'actualizado' : 'creado';
+        
+        if (existing) {
+            console.log(`♻️  Ya existe en italiano: ${translation.title} (actualizando...)`);
+        }
+        
+        const response = await axios.put(
+            `${STRAPI_URL}/api/packages/${pkg.documentId}?locale=it`,
             { data: italianData },
             { 
                 headers: { 
@@ -325,8 +348,8 @@ async function createItalianVersion(pkg, translation) {
             }
         );
 
-        console.log(`✅ Creado en italiano: ${translation.title}`);
-        return { created: true, id: response.data.data.id };
+        console.log(`✅ ${action.charAt(0).toUpperCase() + action.slice(1)} en italiano: ${translation.title}`);
+        return { created: true, updated: !!existing, id: response.data.data.id };
 
     } catch (error) {
         console.error(`❌ Error al crear versión italiana: ${error.response?.data?.error?.message || error.message}`);
@@ -373,10 +396,12 @@ async function seedItalianPackages() {
         console.log('📊 RESUMEN DE CREACIÓN');
         console.log('═'.repeat(56));
         
-        const created = results.filter(r => r.created);
+        const created = results.filter(r => r.created && !r.updated);
+        const updated = results.filter(r => r.created && r.updated);
         const failed = results.filter(r => !r.created);
 
-        console.log(`✅ Creados exitosamente: ${created.length}`);
+        console.log(`✅ Creados: ${created.length}`);
+        console.log(`♻️  Actualizados: ${updated.length}`);
         console.log(`❌ Fallidos: ${failed.length}`);
 
         if (failed.length > 0) {

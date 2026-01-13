@@ -118,10 +118,17 @@ async function getAboutPage(locale = 'es') {
 }
 
 async function createHeroLocalization(documentId, locale, data) {
-    console.log(`\n🎨 Creando Hero Section en ${locale.toUpperCase()}...`);
-    
     try {
-        // Para single types con i18n, usar PUT directo con el locale
+        // Verificar si ya existe
+        const existing = await getHeroSection(locale);
+        
+        if (existing) {
+            console.log(`♻️  Hero Section ya existe en ${locale.toUpperCase()} (actualizando...)`);
+        } else {
+            console.log(`\n🎨 Creando Hero Section en ${locale.toUpperCase()}...`);
+        }
+        
+        // Para single types con i18n, usar PUT directo con el locale (crea o actualiza)
         const response = await axios.put(
             `${STRAPI_URL}/api/hero-section?locale=${locale}`,
             { data },
@@ -133,8 +140,8 @@ async function createHeroLocalization(documentId, locale, data) {
             }
         );
         
-        console.log(`✅ Hero Section creado/actualizado en ${locale.toUpperCase()}`);
-        return { success: true };
+        console.log(`✅ Hero Section ${existing ? 'actualizado' : 'creado'} en ${locale.toUpperCase()}`);
+        return { success: true, updated: !!existing };
     } catch (error) {
         const errMsg = error.response?.data?.error?.message || error.message;
         console.error(`❌ Error: ${errMsg}`);
@@ -143,10 +150,17 @@ async function createHeroLocalization(documentId, locale, data) {
 }
 
 async function createAboutLocalization(documentId, locale, data) {
-    console.log(`\n📖 Creando About Page en ${locale.toUpperCase()}...`);
-    
     try {
-        // Para single types con i18n, usar PUT directo con el locale
+        // Verificar si ya existe
+        const existing = await getAboutPage(locale);
+        
+        if (existing) {
+            console.log(`♻️  About Page ya existe en ${locale.toUpperCase()} (actualizando...)`);
+        } else {
+            console.log(`\n📖 Creando About Page en ${locale.toUpperCase()}...`);
+        }
+        
+        // Para single types con i18n, usar PUT directo con el locale (crea o actualiza)
         const response = await axios.put(
             `${STRAPI_URL}/api/about-page?locale=${locale}`,
             { data },
@@ -158,8 +172,8 @@ async function createAboutLocalization(documentId, locale, data) {
             }
         );
         
-        console.log(`✅ About Page creado/actualizado en ${locale.toUpperCase()}`);
-        return { success: true };
+        console.log(`✅ About Page ${existing ? 'actualizado' : 'creado'} en ${locale.toUpperCase()}`);
+        return { success: true, updated: !!existing };
     } catch (error) {
         const errMsg = error.response?.data?.error?.message || error.message;
         console.error(`❌ Error: ${errMsg}`);

@@ -2,7 +2,20 @@
 
 Este directorio contiene scripts para poblar y gestionar el contenido en Strapi.
 
-## 🚀 Scripts de Población Principal (Para nuevas instalaciones)
+## � Scripts Idempotentes
+
+**Todos los scripts son idempotentes**: pueden ejecutarse múltiples veces de forma segura.
+- Si el contenido ya existe: se actualiza
+- Si el contenido no existe: se crea nuevo
+- No se crean duplicados
+
+Esto permite:
+- Re-ejecutar scripts sin preocupaciones
+- Actualizar traducciones existentes
+- Recuperarse de ejecuciones interrumpidas
+- Poblar ambientes (dev, staging, producción) múltiples veces
+
+## �🚀 Scripts de Población Principal (Para nuevas instalaciones)
 
 ### Orden de ejecución recomendado:
 
@@ -30,15 +43,17 @@ Este directorio contiene scripts para poblar y gestionar el contenido en Strapi.
    ```bash
    node scripts/seed-italian-packages.js
    ```
-   - Crea 7 packages con itinerarios completos en italiano
+   - Crea/actualiza 7 packages con itinerarios completos en italiano
    - Requiere packages en español
+   - **Idempotente**: actualiza si ya existen
 
 5. **seed-german-packages.js** ✅ - Traduce packages a alemán
    ```bash
    node scripts/seed-german-packages.js
    ```
-   - Crea 7 packages con itinerarios completos en alemán
+   - Crea/actualiza 7 packages con itinerarios completos en alemán
    - Requiere packages en español
+   - **Idempotente**: actualiza si ya existen
 
 6. **seed-italian-content.js** - Traduce experiences a italiano
    ```bash
@@ -56,6 +71,7 @@ Este directorio contiene scripts para poblar y gestionar el contenido en Strapi.
    ```bash
    node scripts/seed-hero-about-automated.js
    ```
+   - **Idempotente**: actualiza si ya existe
    - Crea/actualiza Hero Section en italiano y alemán
    - Usa PUT con `?locale=` (Strapi 5 single types)
 
