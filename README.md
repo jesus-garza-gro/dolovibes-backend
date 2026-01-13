@@ -1,61 +1,166 @@
-# 🚀 Getting started with Strapi
+# 🏔️ Dolovibes Backend - Strapi CMS
 
-Strapi comes with a full featured [Command Line Interface](https://docs.strapi.io/dev-docs/cli) (CLI) which lets you scaffold and manage your project in seconds.
+Backend en Strapi 5 para el sitio web de Dolovibes, agencia de viajes especializada en experiencias en los Dolomitas.
 
-### `develop`
+## ⚡ Instalación Rápida (Primera Vez)
 
-Start your Strapi application with autoReload enabled. [Learn more](https://docs.strapi.io/dev-docs/cli#strapi-develop)
+```bash
+# 1. Clonar el repositorio
+git clone <repo-url>
+cd dolovibes-backend
 
-```
-npm run develop
-# or
-yarn develop
-```
+# 2. Instalar dependencias
+npm install
 
-### `start`
-
-Start your Strapi application with autoReload disabled. [Learn more](https://docs.strapi.io/dev-docs/cli#strapi-start)
-
-```
-npm run start
-# or
-yarn start
+# 3. Ejecutar instalación guiada
+./scripts/fresh-install.sh
 ```
 
-### `build`
-
-Build your admin panel. [Learn more](https://docs.strapi.io/dev-docs/cli#strapi-build)
-
-```
-npm run build
-# or
-yarn build
-```
-
-## ⚙️ Deployment
-
-Strapi gives you many possible deployment options for your project including [Strapi Cloud](https://cloud.strapi.io). Browse the [deployment section of the documentation](https://docs.strapi.io/dev-docs/deployment) to find the best solution for your use case.
-
-```
-yarn strapi deploy
-```
-
-## 📚 Learn more
-
-- [Resource center](https://strapi.io/resource-center) - Strapi resource center.
-- [Strapi documentation](https://docs.strapi.io) - Official Strapi documentation.
-- [Strapi tutorials](https://strapi.io/tutorials) - List of tutorials made by the core team and the community.
-- [Strapi blog](https://strapi.io/blog) - Official Strapi blog containing articles made by the Strapi team and the community.
-- [Changelog](https://strapi.io/changelog) - Find out about the Strapi product updates, new features and general improvements.
-
-Feel free to check out the [Strapi GitHub repository](https://github.com/strapi/strapi). Your feedback and contributions are welcome!
-
-## ✨ Community
-
-- [Discord](https://discord.strapi.io) - Come chat with the Strapi community including the core team.
-- [Forum](https://forum.strapi.io/) - Place to discuss, ask questions and find answers, show your Strapi project and get feedback or just talk with other Community members.
-- [Awesome Strapi](https://github.com/strapi/awesome-strapi) - A curated list of awesome things related to Strapi.
+El script `fresh-install.sh` te guiará paso a paso para configurar todo.
 
 ---
 
-<sub>🤫 Psst! [Strapi is hiring](https://strapi.io/careers).</sub>
+## 📋 Requisitos Previos
+
+- Node.js 20+ LTS
+- npm o yarn
+
+## 🚀 Comandos
+
+### Desarrollo
+```bash
+npm run develop    # Servidor con hot-reload en http://localhost:1337
+npm run start      # Servidor de producción
+npm run build      # Compilar admin panel
+```
+
+### Poblar contenido
+```bash
+node scripts/seed-all.js           # Ejecutar todos los seeds
+node scripts/seed-all.js --verify  # Solo verificar estado
+node scripts/seed-all.js --lang=it # Solo un idioma
+node scripts/seed-all.js --dry-run # Ver plan sin ejecutar
+```
+
+---
+
+## ⚙️ Configuración Manual (Alternativa)
+
+Si prefieres configurar manualmente en lugar de usar `fresh-install.sh`:
+
+### 1. Configurar Variables de Entorno
+```bash
+cp .env.example .env
+```
+
+### 2. Iniciar Strapi
+```bash
+npm run develop
+```
+
+### 3. Crear Usuario Admin
+1. Abre http://localhost:1337/admin
+2. Crea tu cuenta de administrador
+
+### 4. Generar API Token
+1. Settings → API Tokens → Create new API Token
+2. Name: `Frontend Token`
+3. Token type: `Full access`
+4. Copia el token al `.env`:
+   ```
+   STRAPI_API_TOKEN=tu_token_aqui
+   ```
+
+### 5. Configurar Locales (i18n)
+1. Settings → Internationalization
+2. Agregar: `en`, `it`, `de`
+3. Verificar que `es` sea default
+
+### 6. Configurar Permisos Públicos
+1. Settings → Users & Permissions → Roles → Public
+2. Habilitar `find` y `findOne` para:
+   - Experience
+   - Package
+   - Hero Section
+   - About Page
+
+### 7. Poblar Contenido
+```bash
+node scripts/seed-all.js
+```
+
+---
+
+## 📂 Estructura del Proyecto
+
+```
+dolovibes-backend/
+├── config/           # Configuración de Strapi
+├── database/         # Base de datos SQLite (dev)
+├── downloads/        # Imágenes para subir a Strapi
+│   ├── experiences/
+│   └── packages/
+├── public/uploads/   # Media library de Strapi
+├── scripts/          # Scripts de instalación y seed
+│   ├── fresh-install.sh    # ⭐ Instalación guiada
+│   ├── seed-all.js         # Script maestro de seeds
+│   └── README.md           # Documentación de scripts
+├── src/
+│   ├── api/          # Content-Types
+│   └── extensions/   # Extensiones de Strapi
+└── types/            # TypeScript definitions
+```
+
+---
+
+## 🌍 Idiomas Soportados
+
+| Código | Idioma | Estado |
+|--------|--------|--------|
+| `es` | Español | Default |
+| `en` | English | ✅ Completo |
+| `it` | Italiano | ✅ Completo |
+| `de` | Deutsch | ✅ Completo |
+
+### Contenido por Idioma
+
+```
+┌─────────────────┬─────┬─────┬─────┬─────┐
+│ Content Type    │  ES │  EN │  IT │  DE │
+├─────────────────┼─────┼─────┼─────┼─────┤
+│ Packages        │  7  │  7  │  7  │  7  │
+│ Experiences     │  6  │  6  │  6  │  6  │
+│ Hero Section    │  1  │  1  │  1  │  1  │
+│ About Page      │  1  │  1  │  1  │  1  │
+└─────────────────┴─────┴─────┴─────┴─────┘
+```
+
+---
+
+## 🐛 Troubleshooting
+
+### Error: "STRAPI_API_TOKEN no configurado"
+- Genera un API Token en Settings → API Tokens
+- Agrégalo al archivo `.env`
+
+### Las imágenes no se ven en el frontend
+1. Verifica que existan en `public/uploads/`
+2. Ejecuta `node scripts/upload-images.js`
+3. Verifica permisos públicos
+
+### Error: "documentId no encontrado"
+- Ejecuta el contenido español primero: `node scripts/create-spanish-content.js`
+
+---
+
+## 📚 Documentación
+
+- [Guía de Scripts](scripts/README.md)
+- [Strapi Documentation](https://docs.strapi.io)
+- [API Reference](http://localhost:1337/documentation)
+
+---
+
+## 📄 Licencia
+
+Ver `license.txt`

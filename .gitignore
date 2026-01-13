@@ -129,3 +129,13 @@ dist
 build
 .strapi-updater.json
 .strapi-cloud.json
+
+############################
+# Downloads (imágenes temporales)
+############################
+
+downloads/**/*.jpg
+downloads/**/*.jpeg
+downloads/**/*.png
+downloads/**/*.gif
+!downloads/**/.gitkeep

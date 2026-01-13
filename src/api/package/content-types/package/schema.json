@@ -16,6 +16,16 @@
     }
   },
   "attributes": {
+    "displayOrder": {
+      "type": "integer",
+      "default": 0,
+      "min": 0,
+      "pluginOptions": {
+        "i18n": {
+          "localized": false
+        }
+      }
+    },
     "title": {
       "type": "string",
       "required": true,
@@ -28,7 +38,12 @@
     "slug": {
       "type": "uid",
       "targetField": "title",
-      "required": true
+      "required": true,
+      "pluginOptions": {
+        "i18n": {
+          "localized": false
+        }
+      }
     },
     "experience": {
       "type": "relation",
@@ -87,7 +102,9 @@
       "type": "media",
       "multiple": false,
       "required": true,
-      "allowedTypes": ["images"],
+      "allowedTypes": [
+        "images"
+      ],
       "pluginOptions": {
         "i18n": {
           "localized": false
@@ -98,7 +115,9 @@
       "type": "media",
       "multiple": false,
       "required": false,
-      "allowedTypes": ["images"],
+      "allowedTypes": [
+        "images"
+      ],
       "pluginOptions": {
         "i18n": {
           "localized": false
@@ -136,7 +155,10 @@
     },
     "season": {
       "type": "enumeration",
-      "enum": ["summer", "winter"],
+      "enum": [
+        "summer",
+        "winter"
+      ],
       "required": true,
       "pluginOptions": {
         "i18n": {

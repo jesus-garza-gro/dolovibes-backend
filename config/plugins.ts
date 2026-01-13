@@ -1,9 +1,9 @@
 export default () => ({
-  // Plugin i18n para soporte multiidioma (ES/EN)
+  // Plugin i18n - Soporte multiidioma (optimizado por ROI)
   i18n: {
     enabled: true,
     config: {
-      locales: ['es', 'en'],
+      locales: ['es', 'en', 'it', 'de'],
       defaultLocale: 'es',
     },
   },
