@@ -162,11 +162,16 @@ async function seedItalian() {
         }
     }
 
-    // 2. Crear experiencias en italiano
+    // 2. Crear experiencias en italiano como TRADUCCIONES (usando PUT con documentId)
     console.log('\n🎯 Creando experiencias...\n');
     
     const experiencesEs = await axios.get(`${STRAPI_URL}/api/experiences`, {
-        params: { locale: 'es', 'pagination[pageSize]': 100 },
+        params: {
+            locale: 'es',
+            'populate[thumbnail]': true,
+            'populate[heroImage]': true,
+            'pagination[pageSize]': 100
+        },
         headers: authHeaders,
     });
 
@@ -177,23 +182,37 @@ async function seedItalian() {
         try {
             // Verificar si ya existe
             const check = await axios.get(`${STRAPI_URL}/api/experiences`, {
-                params: { locale: 'it', 'filters[slug][$eq]': `${exp.slug}-it` },
+                params: { locale: 'it', 'filters[slug][$eq]': exp.slug },
                 headers: authHeaders,
             });
 
-            if (check.data.data.length > 0) {
-                console.log(`⏭️  ${translation.title}: Ya existe`);
-                continue;
+            const exists = check.data.data.length > 0;
+            const action = exists ? 'actualizado' : 'creado';
+
+            // Preparar datos preservando imágenes
+            const dataToSend = {
+                ...translation,
+                slug: exp.slug,  // Mismo slug que ES
+                season: exp.season,
+                difficulty: exp.difficulty,
+            };
+
+            // Conservar IDs de imágenes de ES
+            if (exp.thumbnail?.id) {
+                dataToSend.thumbnail = exp.thumbnail.id;
+            }
+            if (exp.heroImage?.id) {
+                dataToSend.heroImage = exp.heroImage.id;
             }
 
-            await axios.post(`${STRAPI_URL}/api/experiences`, {
-                data: { ...translation, slug: `${exp.slug}-it`, season: exp.season }
-            }, {
-                headers: { ...authHeaders, 'Content-Type': 'application/json' },
-                params: { locale: 'it' }
-            });
+            // PUT con documentId crea/actualiza la traducción
+            await axios.put(
+                `${STRAPI_URL}/api/experiences/${exp.documentId}?locale=it`,
+                { data: dataToSend },
+                { headers: { ...authHeaders, 'Content-Type': 'application/json' } }
+            );
 
-            console.log(`✅ ${translation.title}`);
+            console.log(`✅ ${translation.title} (${action})`);
             experiencesCreated++;
         } catch (error) {
             console.log(`❌ ${translation.title}: ${error.response?.data?.error?.message || error.message}`);
