@@ -202,5 +202,121 @@
     "api::site-setting.site-setting.tiktokUrl": {
         "label": "TikTok",
         "description": "URL del perfil de TikTok"
+    },
+    "api::experience.experience.title": {
+        "label": "Título",
+        "description": "Título que se muestra en el sitio"
+    },
+    "api::experience.experience.displayOrder": {
+        "label": "Orden de visualización",
+        "description": "Número para ordenar (menor = primero)"
+    },
+    "api::experience.experience.shortDescription": {
+        "label": "Descripción corta",
+        "description": "Texto breve para tarjetas y listados"
+    },
+    "api::experience.experience.longDescription": {
+        "label": "Descripción completa",
+        "description": "Texto detallado de la experiencia"
+    },
+    "api::experience.experience.highlights": {
+        "label": "Puntos destacados",
+        "description": "Lista de características principales"
+    },
+    "api::experience.experience.whatToExpect": {
+        "label": "¿Qué esperar?",
+        "description": "Descripción de la experiencia típica"
+    },
+    "api::experience.experience.thumbnail": {
+        "label": "Imagen miniatura",
+        "description": "Imagen pequeña para tarjetas (400x300px)"
+    },
+    "api::experience.experience.heroImage": {
+        "label": "Imagen hero",
+        "description": "Imagen grande de cabecera (1920x1080px)"
+    },
+    "api::experience.experience.difficulty": {
+        "label": "Nivel de dificultad",
+        "description": "Ej: Fácil, Moderado, Difícil"
+    },
+    "api::experience.experience.bestFor": {
+        "label": "Ideal para",
+        "description": "Público objetivo. Ej: Familias, Aventureros"
+    },
+    "api::experience.experience.packages": {
+        "label": "Paquetes relacionados",
+        "description": "Paquetes que pertenecen a esta experiencia"
+    },
+    "api::hero-section.hero-section": {
+        "displayName": "Sección Hero",
+        "description": "Banner principal de la página de inicio"
+    },
+    "api::hero-section.hero-section.title": {
+        "label": "Título principal",
+        "description": "Texto grande del banner. Ej: 'Vive la aventura'"
+    },
+    "api::hero-section.hero-section.titleHighlight": {
+        "label": "Título destacado",
+        "description": "Segunda línea del título con estilo diferente"
+    },
+    "api::hero-section.hero-section.badge": {
+        "label": "Etiqueta/Badge",
+        "description": "Texto pequeño arriba del título. Ej: 'NUEVO'"
+    },
+    "api::hero-section.hero-section.subtitle": {
+        "label": "Subtítulo",
+        "description": "Texto descriptivo debajo del título"
+    },
+    "api::hero-section.hero-section.videoDesktop": {
+        "label": "Video (escritorio)",
+        "description": "Video de fondo para pantallas grandes (MP4)"
+    },
+    "api::hero-section.hero-section.videoMobile": {
+        "label": "Video (móvil)",
+        "description": "Video optimizado para celulares (MP4)"
+    },
+    "api::hero-section.hero-section.fallbackImage": {
+        "label": "Imagen de respaldo",
+        "description": "Se muestra si el video no carga"
+    },
+    "api::about-page.about-page": {
+        "displayName": "Página Nosotros",
+        "description": "Contenido de la página 'Sobre Nosotros'"
+    },
+    "api::about-page.about-page.pageTitle": {
+        "label": "Título de la página",
+        "description": "Encabezado principal de la página"
+    },
+    "api::about-page.about-page.mainPhoto": {
+        "label": "Foto principal",
+        "description": "Imagen destacada del equipo o empresa"
+    },
+    "api::about-page.about-page.photoAlt": {
+        "label": "Texto alternativo (foto)",
+        "description": "Descripción de la imagen para accesibilidad"
+    },
+    "api::about-page.about-page.origin": {
+        "label": "Nuestro origen",
+        "description": "Historia de cómo nació la empresa"
+    },
+    "api::about-page.about-page.essence": {
+        "label": "Nuestra esencia",
+        "description": "Qué nos define como empresa"
+    },
+    "api::about-page.about-page.vision": {
+        "label": "Visión",
+        "description": "Hacia dónde queremos llegar"
+    },
+    "api::about-page.about-page.mission": {
+        "label": "Misión",
+        "description": "Nuestro propósito y razón de ser"
+    },
+    "api::about-page.about-page.team": {
+        "label": "Equipo",
+        "description": "Miembros del equipo"
+    },
+    "api::about-page.about-page.values": {
+        "label": "Valores",
+        "description": "Principios que nos guían"
     }
 }
