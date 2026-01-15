@@ -1,0 +1,206 @@
+{
+    "api::package.package": {
+        "displayName": "Paquete de Viaje",
+        "description": "Paquetes/viajes específicos con itinerario, precios y fechas"
+    },
+    "api::package.package.displayOrder": {
+        "label": "Orden de visualización",
+        "description": "Número para ordenar los paquetes en la lista (menor = primero)"
+    },
+    "api::package.package.title": {
+        "label": "Título del paquete",
+        "description": "Nombre del viaje que verán los clientes"
+    },
+    "api::package.package.slug": {
+        "label": "URL amigable (slug)",
+        "description": "Se genera automáticamente del título. Usado en la URL"
+    },
+    "api::package.package.experience": {
+        "label": "Experiencia relacionada",
+        "description": "Categoría de experiencia a la que pertenece (Trekking, Esquí, etc.)"
+    },
+    "api::package.package.location": {
+        "label": "Ubicación",
+        "description": "Lugar donde se realiza el viaje (ej: Val Badia, Dolomitas)"
+    },
+    "api::package.package.priceAmount": {
+        "label": "Precio actual (EUR)",
+        "description": "Precio en EUROS. El sistema convierte automáticamente a otras monedas"
+    },
+    "api::package.package.originalPriceAmount": {
+        "label": "Precio original (EUR) - Opcional",
+        "description": "Si hay descuento, indicar el precio anterior en EUROS. Dejar vacío si no hay oferta"
+    },
+    "api::package.package.duration": {
+        "label": "Duración del viaje",
+        "description": "Ej: '7 días / 6 noches' o '5 días'"
+    },
+    "api::package.package.rating": {
+        "label": "Calificación (0-5)",
+        "description": "Puntuación del paquete. Máximo 5 estrellas"
+    },
+    "api::package.package.thumbnail": {
+        "label": "Imagen miniatura",
+        "description": "Imagen pequeña para tarjetas y listados (recomendado: 400x300px)"
+    },
+    "api::package.package.heroImage": {
+        "label": "Imagen hero (grande)",
+        "description": "Imagen principal de la página del paquete (recomendado: 1920x1080px)"
+    },
+    "api::package.package.gallery": {
+        "label": "Galería de fotos",
+        "description": "Fotos adicionales del viaje"
+    },
+    "api::package.package.tags": {
+        "label": "Etiquetas",
+        "description": "Tags para filtrar (ej: 'Incluye vuelos', 'Todo incluido')"
+    },
+    "api::package.package.hasDiscount": {
+        "label": "¿Tiene descuento?",
+        "description": "Marcar si el paquete tiene precio de oferta"
+    },
+    "api::package.package.season": {
+        "label": "Temporada",
+        "description": "summer = Verano, winter = Invierno"
+    },
+    "api::package.package.description": {
+        "label": "Descripción del paquete",
+        "description": "Texto que describe el viaje"
+    },
+    "api::package.package.itinerary": {
+        "label": "Itinerario día a día",
+        "description": "Detalle de actividades por cada día del viaje"
+    },
+    "api::package.package.includes": {
+        "label": "¿Qué incluye?",
+        "description": "Lista de servicios incluidos en el precio"
+    },
+    "api::package.package.notIncludes": {
+        "label": "¿Qué NO incluye?",
+        "description": "Lista de servicios que el cliente debe pagar aparte"
+    },
+    "api::package.package.difficulty": {
+        "label": "Nivel de dificultad",
+        "description": "Ej: 'Fácil', 'Moderado', 'Difícil', 'Experto'"
+    },
+    "api::package.package.groupSize": {
+        "label": "Tamaño del grupo",
+        "description": "Ej: '2-8 personas', 'Máximo 12 viajeros'"
+    },
+    "api::package.package.guideType": {
+        "label": "Tipo de guía",
+        "description": "Ej: 'Guía local certificado', 'Autoguiado', 'Guía bilingüe'"
+    },
+    "api::package.package.availableDates": {
+        "label": "Fechas disponibles (texto)",
+        "description": "Texto de fechas para mostrar. Ej: 'Junio - Septiembre 2025'"
+    },
+    "api::package.package.startDates": {
+        "label": "Fechas de salida",
+        "description": "Lista de fechas específicas de inicio"
+    },
+    "api::package.package.locationInfo": {
+        "label": "Información de ubicación",
+        "description": "Detalles del lugar (coordenadas, mapa, dirección)"
+    },
+    "api::package.package.seo": {
+        "label": "SEO y metadatos",
+        "description": "Configuración para buscadores (Google)"
+    },
+    "api::package.package.priceCurrency": {
+        "label": "Moneda del precio",
+        "description": "Todos los precios se capturan en EUROS. El sistema convierte a otras monedas automáticamente"
+    },
+    "api::experience.experience": {
+        "displayName": "Experiencia",
+        "description": "Categorías principales de viajes (Trekking, Esquí, etc.)"
+    },
+    "api::experience.experience.name": {
+        "label": "Nombre de la experiencia",
+        "description": "Nombre que verán los clientes (ej: Trekking, Esquí)"
+    },
+    "api::experience.experience.slug": {
+        "label": "URL amigable",
+        "description": "Se usa en la URL. Ejemplo: /experiencia/trekking"
+    },
+    "api::experience.experience.description": {
+        "label": "Descripción",
+        "description": "Texto descriptivo de la experiencia"
+    },
+    "api::experience.experience.season": {
+        "label": "Temporada",
+        "description": "summer = Verano, winter = Invierno"
+    },
+    "api::site-text.site-text": {
+        "displayName": "Textos del Sitio",
+        "description": "Textos globales que aparecen en toda la página web"
+    },
+    "api::site-text.site-text.loadingExperience": {
+        "label": "Texto de carga (experiencia)",
+        "description": "Mensaje mientras carga la página de experiencia. Ej: 'Cargando experiencia...'"
+    },
+    "api::site-text.site-text.loadingPackage": {
+        "label": "Texto de carga (paquete)",
+        "description": "Mensaje mientras carga la página del paquete. Ej: 'Cargando paquete...'"
+    },
+    "api::site-text.site-text.loadingGeneric": {
+        "label": "Texto de carga (genérico)",
+        "description": "Mensaje de carga general. Ej: 'Cargando...'"
+    },
+    "api::site-text.site-text.availablePackagesTitle": {
+        "label": "Título de paquetes disponibles",
+        "description": "Encabezado de la sección. Ej: 'Paquetes Disponibles'"
+    },
+    "api::site-text.site-text.availablePackagesSubtitle": {
+        "label": "Subtítulo de paquetes disponibles",
+        "description": "Texto debajo del título. Ej: 'Elige el viaje que mejor se adapte...'"
+    },
+    "api::site-text.site-text.contactMethodLabel": {
+        "label": "Label método de contacto",
+        "description": "Texto del formulario. Ej: '¿Cómo te gustaría ser contactado?'"
+    },
+    "api::site-setting.site-setting": {
+        "displayName": "Configuración del Sitio",
+        "description": "Logo, contacto, redes sociales y configuración general"
+    },
+    "api::site-setting.site-setting.siteName": {
+        "label": "Nombre del sitio",
+        "description": "Nombre de la empresa/marca"
+    },
+    "api::site-setting.site-setting.logo": {
+        "label": "Logo principal",
+        "description": "Logo para fondos claros"
+    },
+    "api::site-setting.site-setting.logoDark": {
+        "label": "Logo oscuro",
+        "description": "Logo para fondos oscuros"
+    },
+    "api::site-setting.site-setting.footerDescription": {
+        "label": "Descripción del footer",
+        "description": "Texto que aparece en el pie de página"
+    },
+    "api::site-setting.site-setting.phone": {
+        "label": "Teléfono",
+        "description": "Número de contacto"
+    },
+    "api::site-setting.site-setting.email": {
+        "label": "Correo electrónico",
+        "description": "Email de contacto"
+    },
+    "api::site-setting.site-setting.whatsappNumber": {
+        "label": "WhatsApp",
+        "description": "Número de WhatsApp con código de país (ej: +52...)"
+    },
+    "api::site-setting.site-setting.instagramUrl": {
+        "label": "Instagram",
+        "description": "URL del perfil de Instagram"
+    },
+    "api::site-setting.site-setting.facebookUrl": {
+        "label": "Facebook",
+        "description": "URL de la página de Facebook"
+    },
+    "api::site-setting.site-setting.tiktokUrl": {
+        "label": "TikTok",
+        "description": "URL del perfil de TikTok"
+    }
+}

@@ -905,6 +905,14 @@ export interface ApiPackagePackage extends Struct.CollectionTypeSchema {
           localized: false;
         };
       }>;
+    priceCurrency: Schema.Attribute.Enumeration<['EUR']> &
+      Schema.Attribute.Required &
+      Schema.Attribute.SetPluginOptions<{
+        i18n: {
+          localized: false;
+        };
+      }> &
+      Schema.Attribute.DefaultTo<'EUR'>;
     publishedAt: Schema.Attribute.DateTime;
     rating: Schema.Attribute.Decimal &
       Schema.Attribute.SetPluginOptions<{

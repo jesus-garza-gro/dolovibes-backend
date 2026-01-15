@@ -69,6 +69,19 @@
         }
       }
     },
+    "priceCurrency": {
+      "type": "enumeration",
+      "enum": [
+        "EUR"
+      ],
+      "default": "EUR",
+      "required": true,
+      "pluginOptions": {
+        "i18n": {
+          "localized": false
+        }
+      }
+    },
     "originalPriceAmount": {
       "type": "decimal",
       "required": false,
